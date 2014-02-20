@@ -1,4 +1,5 @@
-== Fast running maximum-minimum filters implemented in C++. ==
+Fast running maximum-minimum filters implemented in C++.
+========================================================== 
 
 
 This code implements the algorithms described in the following paper:
@@ -10,7 +11,8 @@ A preprint is available there:
 
 http://arxiv.org/abs/cs.DS/0610046
 
-== Usage == 
+Usage
+----- 
 
 To reproduce the numbers from the paper, do the following:
 
