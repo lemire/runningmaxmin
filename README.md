@@ -22,4 +22,11 @@ To reproduce the numbers from the paper, do the following:
   
   ./runningmaxmin --white 1000000 --windowrange 4 100  --times 1
 
+Suitability 
+------------
+
+The new algorithm introduced in the manuscript is most suitable for piecewise monotonic
+data or when low-latency is required. Otherwise, Gil-Kimmel and van Herk
+are good choices.
+
 
