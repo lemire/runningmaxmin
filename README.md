@@ -16,8 +16,10 @@ Usage
 
 To reproduce the numbers from the paper, do the following:
 
-make
-./runningmaxmin --sine 1000000 10000 --windowrange 4 100  --times 1
-./runningmaxmin --white 1000000 --windowrange 4 100  --times 1
+  make
+  
+  ./runningmaxmin --sine 1000000 10000 --windowrange 4 100  --times 1
+  
+  ./runningmaxmin --white 1000000 --windowrange 4 100  --times 1
 
 
