@@ -137,6 +137,7 @@ void compareallalgos(vector<floattype> & data, vector<double> & timings,
     finish = clock();
     timings[3] += (double) (finish - start) / CLOCKS_PER_SEC;
     start = clock();
+    lemirebitmapmaxmin BL(data, width);
     finish = clock();
     timings[4] += (double) (finish - start) / CLOCKS_PER_SEC;
     start = clock();
@@ -168,11 +169,11 @@ void timings(uint width = 50, uint size = 10000, uint times = 500,
     cout <<  setw(15) << "vanHerk";
     cout <<  setw(15) << "lemire";
     cout <<  setw(15) << "gilkimmel";
+    cout <<  setw(15) << "buggy";
     cout <<  setw(15) << "simplelemire";
     cout << endl;
     for(int i = 0; i <= 5; ++i ) {
-    	if(i == 4) continue;
-    	cout<< setw(15) << timings[i] ;
+        cout<< setw(15) << timings[i] ;
     }
     cout << endl;
 
@@ -189,10 +190,10 @@ void walktimings(uint width = 50, uint size = 10000, uint times = 500,
     cout <<  setw(15) << "vanHerk";
     cout <<  setw(15) << "lemire";
     cout <<  setw(15) << "gilkimmel";
+    cout <<  setw(15) << "buggy";
     cout <<  setw(15) << "simplelemire";
     cout << endl;
     for(int i = 0; i <= 5; ++i ) {
-    	if(i == 4) continue;
     	cout<< setw(15) << timings[i] ;
     }
     cout << endl;
@@ -212,14 +213,14 @@ void sinetimings(uint width = 50, uint size = 10000, floattype period = 500.0,
     cout <<  setw(15) << "vanHerk";
     cout <<  setw(15) << "lemire";
     cout <<  setw(15) << "gilkimmel";
+    cout <<  setw(15) << "buggy";
     cout <<  setw(15) << "simplelemire";
     cout << endl;
     for(int i = 0; i <= 5; ++i ) {
-    	if(i == 4) continue;
-    	cout<< setw(15) << timings[i] ;
+        cout<< setw(15) << timings[i] ;
     }
     cout << endl;
-    
+
 }
 
 void timingsline(vector<floattype> data, uint width = 30, bool doslow = false) {

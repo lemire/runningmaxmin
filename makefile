@@ -3,8 +3,8 @@
 #
 .SUFFIXES: .cpp .o .c .h
 
-RELEASEFLAGS =  -O3 -Wall -Wextra  -fexceptions -fPIC
-DEBUGFLAGS =  -g3 -Wall   -Wextra -fexceptions -fPIC
+RELEASEFLAGS =  -O3 -Wall -mavx -msse4.2 -Wextra  -fexceptions -fPIC
+DEBUGFLAGS =  -g3 -Wall -mavx -msse4.2   -Wextra -fexceptions -fPIC
 
 all: runningmaxmin 
 

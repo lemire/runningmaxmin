@@ -351,6 +351,108 @@ public:
     vector<floattype> minvalues;
 };
 
+
+
+
+/**
+ * implementation of the streaming algorithm
+ */
+class lemirebitmapmaxmin: public minmaxfilter {
+public:
+    //TODO: make the code portable to non-GCC-like compilers
+    //TODO: extend beyond 64-bit to include 128-bit
+    lemirebitmapmaxmin(vector<floattype> & array, const uint width) :
+        maxvalues(array.size() - width + 1),
+                minvalues(array.size() - width + 1) {
+        assert(width <= sizeof(unsigned long)*8);
+        unsigned long maxfifo = 0;
+        unsigned long minfifo = 0;
+        for (uint i = 1; i < width; ++i) {
+            minfifo <<= 1;
+            maxfifo <<= 1;
+            if (array[i] > array[i - 1]) { //overshoot
+                minfifo |= 1;
+                while (maxfifo != 0 ) {
+                    long t = maxfifo & -maxfifo;
+                    int bitpos =  __builtin_popcountl(t-1);
+                    if (array[i] <= array[i - bitpos]) {
+                        break;
+                    }
+                    maxfifo ^=t;
+                }
+            } else {
+                maxfifo |= 1;
+                while (minfifo != 0 ) {
+                    long t = minfifo & -minfifo;
+                    int bitpos =  __builtin_popcountl(t-1);
+                    if (array[i] >= array[i - bitpos]) {
+                        break;
+                    }
+                    minfifo ^=t;
+                }
+            }
+        }
+        unsigned long mask = ~0l;
+        if(width < sizeof(unsigned long)*8) {
+            mask = (1UL<<width) - 1;
+        }
+        for (uint i = width; i < array.size(); ++i) {
+            maxfifo &= mask;
+            minfifo &= mask;
+            if(maxfifo == 0)
+               maxvalues[i - width] = array[ i - 1 ];
+            else {
+                maxvalues[i - width] = array[ i - ( __builtin_popcountl(maxfifo)-(sizeof(unsigned long)*8 - width)) ];
+            }
+            if(minfifo == 0)
+                minvalues[i - width] = array[ i - 1 ];
+            else {
+                minvalues[i - width] = array[ i  - ( __builtin_popcountl(minfifo)-(sizeof(unsigned long)*8 - width)) ];
+            }
+            minfifo <<= 1;
+            maxfifo <<= 1;
+            if (array[i] > array[i - 1]) { //overshoot
+                minfifo |= 1;
+                while (maxfifo != 0 ) {
+                    long t = maxfifo & -maxfifo;
+                    int bitpos =  __builtin_popcountl(t-1);
+                    if (array[i] <= array[i - bitpos]) {
+                        break;
+                    }
+                    maxfifo ^=t;
+                }
+            } else {
+                maxfifo |= 1;
+                while (minfifo != 0 ) {
+                    long t = minfifo & -minfifo;
+                    int bitpos =  __builtin_popcountl(t-1);
+                    if (array[i] >= array[i - bitpos]) {
+                        break;
+                    }
+                    minfifo ^=t;
+                }
+            }
+        }
+        if(maxfifo == 0)
+            maxvalues[array.size() - width] = array[ array.size() - 1 ];
+        else
+            maxvalues[array.size() - width] = array[ array.size() - ( __builtin_popcountl(maxfifo)-(sizeof(unsigned long)*8 - width)) ];
+        if(minfifo == 0)
+            minvalues[array.size() - width] = array[ array.size() - 1 ];
+        else
+            minvalues[array.size() - width] = array[ array.size()  - ( __builtin_popcountl(minfifo)-(sizeof(unsigned long)*8 - width)) ];
+    }
+    vector<floattype> & getmaxvalues() {
+        return maxvalues;
+    }
+    vector<floattype> & getminvalues() {
+        return minvalues;
+    }
+    vector<floattype> maxvalues;
+    vector<floattype> minvalues;
+};
+
+
 /**
  * simplest implementation (pseudocode-like)
  */
