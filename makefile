@@ -9,10 +9,10 @@ DEBUGFLAGS =  -g3 -Wall -mavx -msse4.2   -Wextra -fexceptions -fPIC
 all: runningmaxmin 
 
 debug: runningmaxmin.h runningmaxmin.cpp
-	g++ $(DEBUGFLAGS) -o runningmaxmin runningmaxmin.cpp
+	$(CXX) $(DEBUGFLAGS) -o runningmaxmin runningmaxmin.cpp
 
 runningmaxmin : runningmaxmin.h runningmaxmin.cpp
-	g++ $(RELEASEFLAGS) -o runningmaxmin runningmaxmin.cpp
+	$(CXX) $(RELEASEFLAGS) -o runningmaxmin runningmaxmin.cpp
 
 
 clean:
