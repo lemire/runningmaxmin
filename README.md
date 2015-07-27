@@ -29,4 +29,11 @@ The new algorithm introduced in the manuscript is most suitable for piecewise mo
 data or when low-latency is required. Otherwise, Gil-Kimmel and van Herk
 are good choices.
 
+See also
+---------
+
+For an application of this idea to rolling statistics in JavaScript, see
+
+https://github.com/shimondoodkin/efficient-rolling-stats
+
 
