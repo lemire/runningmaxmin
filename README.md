@@ -36,4 +36,6 @@ For an application of this idea to rolling statistics in JavaScript, see
 
 https://github.com/shimondoodkin/efficient-rolling-stats
 
+For an application in Go, please see 
 
+https://github.com/notnot/movingminmax
