@@ -369,10 +369,10 @@ public:
         const bool USEPOP = true;
         unsigned long minfifo = 0;
         for (uint i = 1; i < width; ++i) {
-            minfifo <<= 1;
-            maxfifo <<= 1;
             if (array[i] > array[i - 1]) { //overshoot
                 minfifo |= 1;
+            	minfifo <<= 1;
+           	maxfifo <<= 1;
                 while (maxfifo != 0 ) {
                     if (USEPOP) {
                         const long t = maxfifo & -maxfifo;
@@ -391,6 +391,8 @@ public:
                 }
             } else {
                 maxfifo |= 1;
+            	minfifo <<= 1;
+          	maxfifo <<= 1;
                 while (minfifo != 0 ) {
                     if (USEPOP) {
                         const long t = minfifo & -minfifo;
@@ -419,17 +421,17 @@ public:
             if(maxfifo == 0)
                maxvalues[i - width] = array[ i - 1 ];
             else {
-                maxvalues[i - width] = array[ i - ( __builtin_clzl(maxfifo)-(sizeof(unsigned long)*8 - width)) ];
+                maxvalues[i - width] = array[ i - ( sizeof(unsigned long)*8 - __builtin_clzl(maxfifo)) ];
             }
             if(minfifo == 0)
                 minvalues[i - width] = array[ i - 1 ];
             else {
-                minvalues[i - width] = array[ i  - ( __builtin_clzl(minfifo)-(sizeof(unsigned long)*8 - width)) ];
+                minvalues[i - width] = array[ i - ( sizeof(unsigned long)*8 - __builtin_clzl(minfifo)) ];
             }
-            minfifo <<= 1;
-            maxfifo <<= 1;
             if (array[i] > array[i - 1]) { //overshoot
                 minfifo |= 1;
+                minfifo <<= 1;
+		maxfifo <<= 1;
                 while (maxfifo != 0 ) {
                     if (USEPOP) {
                         const long t = maxfifo & -maxfifo;
@@ -448,6 +450,8 @@ public:
                 }
             } else {
                 maxfifo |= 1;
+		maxfifo <<= 1;
+		minfifo <<= 1;
                 while (minfifo != 0 ) {
                     if (USEPOP) {
                         const long t = minfifo & -minfifo;
@@ -466,15 +470,17 @@ public:
                 }
             }
         }
+	maxfifo=maxfifo & mask;
+	minfifo=minfifo & mask;
         if(maxfifo == 0)
             maxvalues[array.size() - width] = array[ array.size() - 1 ];
         else
-            maxvalues[array.size() - width] = array[ array.size() - ( __builtin_clzl(maxfifo)-(sizeof(unsigned long)*8 - width)) ];
-        if(minfifo == 0)
+            maxvalues[array.size() - width] = array[ array.size() -  ( sizeof(unsigned long)*8 - __builtin_clzl(maxfifo)) ];
+	if(minfifo == 0)
             minvalues[array.size() - width] = array[ array.size() - 1 ];
         else
-            minvalues[array.size() - width] = array[ array.size()  - ( __builtin_clzl(minfifo)-(sizeof(unsigned long)*8 - width)) ];
-    }
+            minvalues[array.size() - width] = array[ array.size()  - ( sizeof(unsigned long)*8 - __builtin_clzl(minfifo)) ];
+	 }
     vector<floattype> & getmaxvalues() {
         return maxvalues;
     }
