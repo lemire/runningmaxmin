@@ -16,7 +16,7 @@ bool compare(vector<floattype> &a, vector<floattype> &b) {
 }
 bool compare(minmaxfilter & a, minmaxfilter & b) {
     return compare(a.getmaxvalues(), b.getmaxvalues()) & compare(
-            a.getminvalues(), b.getminvalues());
+               a.getminvalues(), b.getminvalues());
 }
 
 void display(minmaxfilter & a) {
@@ -129,7 +129,7 @@ vector<floattype> getcin() {
 }
 
 void compareallalgos(vector<floattype> & data, vector<double> & timings,
-        uint width, bool doslow) {
+                     uint width, bool doslow) {
     if (timings.size() < 7)
         timings = vector<double> (7, 0.0);
     clock_t start, finish;
@@ -166,18 +166,18 @@ void compareallalgos(vector<floattype> & data, vector<double> & timings,
 }
 
 void process(vector<floattype> & data, uint width = 30, uint times = 1,
-        bool doslow = true) {
+             bool doslow = true) {
     vector<double> timings;
     for (uint i = 0; i < times; ++i) {
         compareallalgos(data, timings, width, doslow);
     }
     cout << "#\tslow\t\tvanHerk\t\tlemire\tsimplelemire\t\tgilkimmel" << endl;
     cout << "\t" << timings[0] << "\t" << timings[1] << "\t" << timings[2]
-            << "\t" << timings[5] << "\t\t" << timings[3] << endl;
+         << "\t" << timings[5] << "\t\t" << timings[3] << endl;
 }
 
 void timings(uint width = 50, uint size = 10000, uint times = 500,
-        bool doslow = true) {
+             bool doslow = true) {
     vector<double> timings;
     for (uint i = 0; i < times; ++i) {
         vector<floattype> data = getwhite(size);
@@ -199,7 +199,7 @@ void timings(uint width = 50, uint size = 10000, uint times = 500,
 }
 
 void walktimings(uint width = 50, uint size = 10000, uint times = 500,
-        bool doslow = true) {
+                 bool doslow = true) {
     vector<double> timings;
     for (uint i = 0; i < times; ++i) {
         vector<floattype> data = getrandomwalk(size);
@@ -214,14 +214,14 @@ void walktimings(uint width = 50, uint size = 10000, uint times = 500,
     cout <<  setw(15) << "lemirew";
     cout << endl;
     for(int i = 0; i <= 6; ++i ) {
-    	cout<< setw(15) << timings[i] ;
+        cout<< setw(15) << timings[i] ;
     }
     cout << endl;
 
 }
 
 void sinetimings(uint width = 50, uint size = 10000, floattype period = 500.0,
-        uint times = 500, bool doslow = true) {
+                 uint times = 500, bool doslow = true) {
     vector<double> timings;
     for (uint i = 0; i < times; ++i) {
         vector<floattype> data(size);
@@ -328,7 +328,7 @@ int main(int params, char ** args) {
             if (params - i > 1)
                 walksize = atoi(args[++i]);
             else {
-                cerr << "--white expects an integer (length)" << endl;
+                cerr << "--walk expects an integer (length)" << endl;
                 return -1;
             }
             continue;
@@ -363,32 +363,32 @@ int main(int params, char ** args) {
     for (int window = windowbegin; window < windowend; ++window) {
         if (whitesize > 0) {
             cout << "# window = " << window << " whitesize = " << whitesize
-                    << " times = " << times << " doslow = " << doslow << endl;
+                 << " times = " << times << " doslow = " << doslow << endl;
             assert(window + 1 < whitesize);
             timings(window, whitesize, times, doslow);
         } else if (walksize > 0) {
             cout << "# window = " << window << " walksize = " << walksize
-                    << " times = " << times << " doslow = " << doslow << endl;
+                 << " times = " << times << " doslow = " << doslow << endl;
             walktimings(window, walksize, times, doslow);
 
         } else if (sinesize > 0) {
             cout << "# window = " << window << " sinesize = " << sinesize
-                    << " sine period " << sineperiod << " times = " << times
-                    << " doslow = " << doslow << endl;
+                 << " sine period " << sineperiod << " times = " << times
+                 << " doslow = " << doslow << endl;
             assert(window + 1 < sinesize);
             sinetimings(window, sinesize, sineperiod, times, doslow);
         } else {
             if ((data.size() == 0) && cininput) {
                 data = getcin();
                 cout << "# window = " << window << " times = " << times
-                        << " doslow = " << doslow << endl;
+                     << " doslow = " << doslow << endl;
                 process(data, window, times, doslow);
             } else {
-               cout<<"Generating sine waves."<<endl;
-               for(uint width = 3; width <=100; ++width) {
-                  cout << "Using a min/max width of " << width << endl;
-                  sinetimings(width);
-               }
+                cout<<"Generating sine waves."<<endl;
+                for(uint width = 3; width <=100; ++width) {
+                    cout << "Using a min/max width of " << width << endl;
+                    sinetimings(width);
+                }
             }
         }
     }
