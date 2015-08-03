@@ -31,6 +31,7 @@ void test(vector<floattype> data, uint width = 3) {
     simplelemiremaxmin G(data, width);
     GilKimmel D(data, width);
     vanHerkGilWermanmaxmin B(data, width);
+    lemirebitmapmaxmin E(data,width);
     if (!compare(A, D)) {
         cout << "array " << endl;
         display(data);
@@ -59,6 +60,7 @@ void test(vector<floattype> data, uint width = 3) {
     assert(compare(A, B));
     assert(compare(A, D));
     assert(compare(A, G));
+    assert(compare(A, E));
 }
 
 void unit() {
