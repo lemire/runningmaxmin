@@ -151,7 +151,7 @@ void compareallalgos(vector<floattype> & data, vector<double> & timings,
     finish = clock();
     timings[3] += (double) (finish - start) / CLOCKS_PER_SEC;
     start = clock();
-    lemirebitmapmaxmin BL(data, width);
+    if(width <  sizeof(unsigned long)*8) lemirebitmapmaxmin BL(data, width);
     finish = clock();
     timings[4] += (double) (finish - start) / CLOCKS_PER_SEC;
     start = clock();
