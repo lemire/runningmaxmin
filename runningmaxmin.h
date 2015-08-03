@@ -1,5 +1,5 @@
 /**
- * Copyright 2006, Daniel Lemire
+ * Copyright 2006-..., Daniel Lemire
  * Streaming Maximum-Minimum Filter Using No More than 3 Comparisons per Element
  */
 /**
@@ -16,21 +16,9 @@
 
 #ifndef RUNNINGMAXMIN
 #define RUNNINGMAXMIN
-#include <cmath>
-#include <cassert>
-#include <vector>
-#include <deque>
-#include <map>
-#include <algorithm>
-#include <iostream>
-#include <sstream>
-#include <stdlib.h>
-#include <fstream>
-#include <string.h>
 
-typedef unsigned int uint;
-
-typedef double floattype;
+#include "common.h"
+#include "deque.h"
 
 using namespace std;
 
@@ -351,6 +339,87 @@ public:
     vector<floattype> minvalues;
 };
 
+
+// actual streaming implementation
+class lemiremaxmintruestreaming {
+public:
+    lemiremaxmintruestreaming(uint width) : up(), lo(), n(0), ww(width){
+        init(&up, ww);
+        init(&lo, ww);
+
+    }
+    
+    ~lemiremaxmintruestreaming() {
+        free(&up);
+        free(&lo);
+    }
+    
+    
+    void update(floattype value) {
+       if ( nonempty(&up) ) {
+		if ( value > tailvalue(&up) ) {
+			prunetail(&up);
+			while ((nonempty(&up)) && (value >= tailvalue(&up))) {
+				prunetail(&up);
+			}
+		} else {
+			prunetail(&lo);
+			while ( (nonempty(&lo)) && (value <= tailvalue(&lo))) {
+				prunetail(&lo);
+			}
+		}
+	}
+	push(&up, n, value);
+	if ( n == ww + headindex(&up) ) {
+		prunehead(&up);
+	}
+	
+	push(&lo, n, value);
+	if ( n == ww+headindex(&lo) )  {
+		prunehead(&lo);
+	}
+	n++;
+
+    }
+    
+    floattype max() {
+        return headvalue(&up);
+    }
+    floattype min() {
+        return headvalue(&lo);
+    }    
+    
+    intfloatqueue up;
+    intfloatqueue lo;
+    uint n;
+    uint ww;
+};
+
+// wrapper over the streaming version
+class lemiremaxminwrap: public minmaxfilter {
+public:
+    lemiremaxminwrap(vector<floattype> & array, uint width) :
+        maxvalues(array.size() - width + 1),
+                minvalues(array.size() - width + 1) {
+        lemiremaxmintruestreaming lts (width);
+        for (uint i = 0; i < width - 1; ++i) {
+            lts.update(array[i]);
+        }
+        for (uint i = width - 1; i < array.size(); ++i) {
+            lts.update(array[i]);
+            maxvalues[i - width + 1] = lts.max();
+            minvalues[i - width + 1]  = lts.min();
+        }
+    }
+    vector<floattype> & getmaxvalues() {
+        return maxvalues;
+    }
+    vector<floattype> & getminvalues() {
+        return minvalues;
+    }
+    vector<floattype> maxvalues;
+    vector<floattype> minvalues;
+};
 
 
 
