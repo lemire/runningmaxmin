@@ -435,7 +435,6 @@ public:
         minvalues(array.size() - width + 1) {
         assert(width <= sizeof(unsigned long)*8);
         unsigned long maxfifo = 0;
-        const bool USEPOP = true;
         unsigned long minfifo = 0;
         for (uint i = 1; i < width; ++i) {
             if (array[i] > array[i - 1]) { //overshoot
@@ -443,40 +442,24 @@ public:
                 minfifo <<= 1;
                 maxfifo <<= 1;
                 while (maxfifo != 0 ) {
-                    if (USEPOP) {
                         const long t = maxfifo & -maxfifo;
                         const int bitpos = __builtin_popcountl(t - 1);
                         if (array[i] <= array[i - bitpos]) {
                             break;
                         }
                         maxfifo ^= t;
-                    } else {
-                        const int bitpos = __builtin_ctzl(maxfifo);
-                        if (array[i] >= array[i - bitpos]) {
-                            break;
-                        }
-                        maxfifo ^= (1l << bitpos);
-                    }
                 }
             } else {
                 maxfifo |= 1;
                 minfifo <<= 1;
                 maxfifo <<= 1;
                 while (minfifo != 0 ) {
-                    if (USEPOP) {
                         const long t = minfifo & -minfifo;
                         const int bitpos = __builtin_popcountl(t - 1);
                         if (array[i] >= array[i - bitpos]) {
                             break;
                         }
                         minfifo ^= t;
-                    } else {
-                        const int bitpos = __builtin_ctzl(minfifo);
-                        if (array[i] >= array[i - bitpos]) {
-                            break;
-                        }
-                        minfifo ^= (1l << bitpos);
-                    }
                 }
             }
         }
@@ -502,40 +485,24 @@ public:
                 minfifo <<= 1;
                 maxfifo <<= 1;
                 while (maxfifo != 0 ) {
-                    if (USEPOP) {
                         const long t = maxfifo & -maxfifo;
                         const int bitpos = __builtin_popcountl(t - 1);
                         if (array[i] <= array[i - bitpos]) {
                             break;
                         }
                         maxfifo ^= t;
-                    } else {
-                        const int bitpos = __builtin_ctzl(maxfifo);
-                        if (array[i] >= array[i - bitpos]) {
-                            break;
-                        }
-                        maxfifo ^= (1l << bitpos);
-                    }
                 }
             } else {
                 maxfifo |= 1;
                 maxfifo <<= 1;
                 minfifo <<= 1;
                 while (minfifo != 0 ) {
-                    if (USEPOP) {
                         const long t = minfifo & -minfifo;
                         const int bitpos = __builtin_popcountl(t - 1);
                         if (array[i] >= array[i - bitpos]) {
                             break;
                         }
                         minfifo ^= t;
-                    } else {
-                        const int bitpos = __builtin_ctzl(minfifo);
-                        if (array[i] >= array[i - bitpos]) {
-                            break;
-                        }
-                        minfifo ^= (1l << bitpos);
-                    }
                 }
             }
         }

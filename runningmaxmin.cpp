@@ -340,7 +340,7 @@ int main(int params, char ** args) {
                 cerr << "--sine expects an integer (length)" << endl;
                 return -1;
             }
-            if (params - i > 2)
+            if (params - i > 1)
                 sineperiod = atof(args[++i]);
             else {
                 cerr
