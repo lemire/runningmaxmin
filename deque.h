@@ -1,4 +1,5 @@
-#ifndef DEQUE
+
+#ifndef DEQUE
 #define DEQUE
 
 #include "common.h"
@@ -6,11 +7,11 @@
 
 // nextPowerOfTwo returns a power of two that is larger or equal than x.
 uint nextPowerOfTwo(uint x) {
-	uint result = 1;
-	while (result < x) {
-		result <<= 1;
-	}
-	return result;
+    uint result = 1;
+    while (result < x) {
+        result <<= 1;
+    }
+    return result;
 }
 
 struct intfloatnode {
@@ -28,7 +29,7 @@ struct intfloatqueue {
 
 uint count(intfloatqueue * q) {
     return (q->tail - q->head) & q->mask;
-} 
+}
 
 void init(intfloatqueue * q, uint size) {
     size = nextPowerOfTwo(size + 1);
@@ -48,13 +49,13 @@ uint headindex(intfloatqueue * q) {
 
 void push(intfloatqueue * q, uint index, floattype value) {
     q->nodes[q->tail].index = index;
-	q->nodes[q->tail].value = value;
-	q->tail = (q->tail + 1) & q->mask;
+    q->nodes[q->tail].value = value;
+    q->tail = (q->tail + 1) & q->mask;
 }
 
 
 floattype tailvalue(intfloatqueue * q)  {
-	return q->nodes[(q->tail-1)&q->mask].value;
+    return q->nodes[(q->tail-1)&q->mask].value;
 }
 
 floattype headvalue(intfloatqueue * q) {
@@ -66,7 +67,7 @@ void prunehead(intfloatqueue * q) {
 
 void prunetail(intfloatqueue * q) {
     q->tail = (q->tail - 1) & q->mask;
-}    
+}
 
 int nonempty(intfloatqueue * q) {
     return q->tail != q->head;

@@ -328,7 +328,7 @@ int main(int params, char ** args) {
             if (params - i > 1)
                 walksize = atoi(args[++i]);
             else {
-                cerr << "--white expects an integer (length)" << endl;
+                cerr << "--walk expects an integer (length)" << endl;
                 return -1;
             }
             continue;
