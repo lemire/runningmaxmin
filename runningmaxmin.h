@@ -228,10 +228,11 @@ public:
             for (uint i = Rpos - 1; i + 1 > j; i -= 1)
                 R[Rpos - i] = max(R[Rpos - i - 1], array[i]);
             S[0] = array[Rpos];
-            for (uint i = Rpos + 1; i < min(j + 2 * width - 1, array.size()); ++i) {
+            uint m1 = min(j + 2 * width - 1, array.size());
+            for (uint i = Rpos + 1; i < m1 ; ++i) {
                 S[i - Rpos] = max(S[i - Rpos - 1], array[i]);
             }
-            for (uint i = 0; i < min(j + 2 * width - 1, array.size()) - Rpos; i
+            for (uint i = 0; i < m1 - Rpos; i
                     += 1)
                 maxvalues[j + i] = max(S[i], R[(Rpos - j + 1) - i - 1]);
         }
@@ -241,10 +242,11 @@ public:
             for (uint i = Rpos - 1; i + 1 > j; i -= 1)
                 R[Rpos - i] = min(R[Rpos - i - 1], array[i]);
             S[0] = array[Rpos];
-            for (uint i = Rpos + 1; i < min(j + 2 * width - 1, array.size()); ++i) {
+            uint m1 = min(j + 2 * width - 1, array.size());
+            for (uint i = Rpos + 1; i < m1 ; ++i) {
                 S[i - Rpos] = min(S[i - Rpos - 1], array[i]);
             }
-            for (uint i = 0; i < min(j + 2 * width - 1, array.size()) - Rpos; i
+            for (uint i = 0; i < m1 - Rpos; i
                     += 1)
                 minvalues[j + i] = min(S[i], R[(Rpos - j + 1) - i - 1]);
         }
