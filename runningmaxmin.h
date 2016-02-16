@@ -98,8 +98,8 @@ public:
     GilKimmel(vector<floattype> & array, int width) :
         maxvalues(array.size() - width + 1),
         minvalues(array.size() - width + 1) {
-        vector<floattype> R(array.size(), -1);
-        vector<floattype> S(array.size(), -1);
+        vector<floattype> R(array.size() + 1);
+        vector<floattype> S(array.size() + 1);
         computePrefixSuffixMax(R, S, array, width);// implements the cut in the middle trick
         for (int j = 0; j < (int) array.size() - width + 1; j += width) {
             const int endofblock = min(j + width,
