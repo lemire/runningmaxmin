@@ -3,8 +3,8 @@
 #include <iostream>
 
 #include "runningmaxmin.h"
-#include <stdlib.h>
-#include <time.h>
+#include <cstdlib>
+#include <ctime>
 
 bool compare(std::vector<floattype> & a, std::vector<floattype> & b) {
     if (a.size() != b.size())
@@ -15,8 +15,8 @@ bool compare(std::vector<floattype> & a, std::vector<floattype> & b) {
     return true;
 }
 bool compare(minmaxfilter & a, minmaxfilter & b) {
-    return compare(a.getmaxvalues(), b.getmaxvalues()) &
-           compare(a.getminvalues(), b.getminvalues());
+    return static_cast<int>((compare(a.getmaxvalues(), b.getmaxvalues())) &
+           static_cast<int>(compare(a.getminvalues(), b.getminvalues()))) != 0;
 }
 
 void display(minmaxfilter & a) {
@@ -137,32 +137,32 @@ void compareallalgos(std::vector<floattype> & data,
     if (doslow)
         slowmaxmin A(data, width);
     finish = clock();
-    timings[0] += (double)(finish - start) / CLOCKS_PER_SEC;
+    timings[0] += static_cast<double>(finish - start) / CLOCKS_PER_SEC;
     start = clock();
     vanHerkGilWermanmaxmin B(data, width);
     finish = clock();
-    timings[1] += (double)(finish - start) / CLOCKS_PER_SEC;
+    timings[1] += static_cast<double>(finish - start) / CLOCKS_PER_SEC;
     start = clock();
     lemiremaxmin C(data, width);
     finish = clock();
-    timings[2] += (double)(finish - start) / CLOCKS_PER_SEC;
+    timings[2] += static_cast<double>(finish - start) / CLOCKS_PER_SEC;
     start = clock();
     GilKimmel D(data, width);
     finish = clock();
-    timings[3] += (double)(finish - start) / CLOCKS_PER_SEC;
+    timings[3] += static_cast<double>(finish - start) / CLOCKS_PER_SEC;
     start = clock();
     if (width < sizeof(unsigned long) * 8)
         lemirebitmapmaxmin BL(data, width);
     finish = clock();
-    timings[4] += (double)(finish - start) / CLOCKS_PER_SEC;
+    timings[4] += static_cast<double>(finish - start) / CLOCKS_PER_SEC;
     start = clock();
     simplelemiremaxmin F(data, width);
     finish = clock();
-    timings[5] += (double)(finish - start) / CLOCKS_PER_SEC;
+    timings[5] += static_cast<double>(finish - start) / CLOCKS_PER_SEC;
     start = clock();
     lemiremaxminwrap Cw(data, width);
     finish = clock();
-    timings[6] += (double)(finish - start) / CLOCKS_PER_SEC;
+    timings[6] += static_cast<double>(finish - start) / CLOCKS_PER_SEC;
 }
 
 void process(std::vector<floattype> & data, uint width = 30, uint times = 1,
@@ -252,19 +252,19 @@ void timingsline(std::vector<floattype> data, uint width = 30,
         for (uint i = 0; i < 30; ++i)
             slowmaxmin A(data, width);
     finish = clock();
-    std::cout << "slow = " << (double)(finish - start) / CLOCKS_PER_SEC
+    std::cout << "slow = " << static_cast<double>(finish - start) / CLOCKS_PER_SEC
               << std::endl;
     start = clock();
     for (uint i = 0; i < 30; ++i)
         vanHerkGilWermanmaxmin B(data, width);
     finish = clock();
-    std::cout << "vanHerk = " << (double)(finish - start) / CLOCKS_PER_SEC
+    std::cout << "vanHerk = " << static_cast<double>(finish - start) / CLOCKS_PER_SEC
               << std::endl;
     start = clock();
     for (uint i = 0; i < 30; ++i)
         lemiremaxmin C(data, width);
     finish = clock();
-    std::cout << "lemire = " << (double)(finish - start) / CLOCKS_PER_SEC
+    std::cout << "lemire = " << static_cast<double>(finish - start) / CLOCKS_PER_SEC
               << std::endl;
     std::cout << "------------" << std::endl;
 }
@@ -384,7 +384,7 @@ int main(int params, char ** args) {
             assert(window + 1 < sinesize);
             sinetimings(window, sinesize, sineperiod, times, doslow);
         } else {
-            if ((data.size() == 0) && cininput) {
+            if ((data.empty()) && cininput) {
                 data = getcin();
                 std::cout << "# window = " << window << " times = " << times
                           << " doslow = " << doslow << std::endl;

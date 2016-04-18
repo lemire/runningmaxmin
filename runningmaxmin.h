@@ -13,32 +13,32 @@
  *  Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef RUNNINGMAXMIN
-#define RUNNINGMAXMIN
+#ifndef RUNNINGMAXMIN_H
+#define RUNNINGMAXMIN_H
 
 #include "common.h"
 #include "deque.h"
 
-uint max(uint a, uint b) {
+inline uint max(uint a, uint b) {
     if (a > b)
         return a;
     return b;
 }
-uint min(uint a, uint b) {
+inline uint min(uint a, uint b) {
     if (a < b)
         return a;
     return b;
 }
 
-void display(std::deque<int> & a) {
-    for (uint i = 0; i < a.size(); ++i)
-        std::cout << a[i] << " ";
+inline void display(std::deque<int> & a) {
+    for (int i : a)
+        std::cout << i << " ";
     std::cout << std::endl;
 }
 
-void display(std::vector<floattype> & a) {
-    for (uint i = 0; i < a.size(); ++i)
-        std::cout << a[i] << " ";
+inline void display(std::vector<floattype> & a) {
+    for (double i : a)
+        std::cout << i << " ";
     std::cout << std::endl;
 }
 
@@ -47,7 +47,7 @@ public:
     virtual std::vector<floattype> & getmaxvalues() = 0;
     virtual std::vector<floattype> & getminvalues() = 0;
 
-    virtual ~minmaxfilter(){};
+    virtual ~minmaxfilter()= default;;
 };
 
 /**
@@ -96,9 +96,9 @@ public:
         std::vector<floattype> S(array.size() + 1);
         computePrefixSuffixMax(R, S, array,
                                width); // implements the cut in the middle trick
-        for (int j = 0; j < (int)array.size() - width + 1; j += width) {
+        for (int j = 0; j < static_cast<int>(array.size()) - width + 1; j += width) {
             const int endofblock =
-                min(j + width, (int)array.size() - width + 1);
+                min(j + width, static_cast<int>(array.size()) - width + 1);
             int begin = j;
             int end = endofblock;
             int midpoint = (end - begin + 1) / 2 + begin;
@@ -120,9 +120,9 @@ public:
         }
         computePrefixSuffixMin(R, S, array,
                                width); // implements the cut in the middle trick
-        for (int j = 0; j < (int)array.size() - width + 1; j += width) {
+        for (int j = 0; j < static_cast<int>(array.size()) - width + 1; j += width) {
             const int endofblock =
-                min(j + width, (int)array.size() - width + 1);
+                min(j + width, static_cast<int>(array.size()) - width + 1);
             int begin = j;
             int end = endofblock;
             int midpoint = (end - begin + 1) / 2 + begin;
@@ -147,9 +147,9 @@ public:
                                 std::vector<floattype> & S,
                                 const std::vector<floattype> & array,
                                 const int width) {
-        for (int j = 0; j < (int)array.size(); j += width) {
+        for (int j = 0; j < static_cast<int>(array.size()); j += width) {
             const int begin = j;
-            const int end = min((int)array.size(), j + width);
+            const int end = min(static_cast<int>(array.size()), j + width);
             const int midpoint = (end - begin + 1) / 2 + begin;
             S[begin] = array[begin];
             for (int jj = begin + 1; jj < midpoint; ++jj) {
@@ -177,9 +177,9 @@ public:
                                 std::vector<floattype> & S,
                                 const std::vector<floattype> & array,
                                 const int width) {
-        for (int j = 0; j < (int)array.size(); j += width) {
+        for (int j = 0; j < static_cast<int>(array.size()); j += width) {
             const int begin = j;
-            const int end = min((int)array.size(), j + width);
+            const int end = min(static_cast<int>(array.size()), j + width);
             const int midpoint = (end - begin + 1) / 2 + begin;
             S[begin] = array[begin];
             for (int jj = begin + 1; jj < midpoint; ++jj) {
@@ -342,7 +342,7 @@ public:
 // actual streaming implementation
 class lemiremaxmintruestreaming {
 public:
-    lemiremaxmintruestreaming(uint width) : up(), lo(), n(0), ww(width) {
+    explicit lemiremaxmintruestreaming(uint width) : up(), lo(), n(0), ww(width) {
         init(&up, ww);
         init(&lo, ww);
     }
@@ -353,15 +353,15 @@ public:
     }
 
     void update(floattype value) {
-        if (nonempty(&up)) {
+        if (nonempty(&up) != 0) {
             if (value > tailvalue(&up)) {
                 prunetail(&up);
-                while ((nonempty(&up)) && (value >= tailvalue(&up))) {
+                while (((nonempty(&up)) != 0) && (value >= tailvalue(&up))) {
                     prunetail(&up);
                 }
             } else {
                 prunetail(&lo);
-                while ((nonempty(&lo)) && (value <= tailvalue(&lo))) {
+                while (((nonempty(&lo)) != 0) && (value <= tailvalue(&lo))) {
                     prunetail(&lo);
                 }
             }

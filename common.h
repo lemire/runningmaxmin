@@ -1,6 +1,6 @@
 
-#ifndef COMMON
-#define COMMON
+#ifndef COMMON_H
+#define COMMON_H
 
 #include <algorithm>
 #include <cassert>
@@ -10,8 +10,8 @@
 #include <iostream>
 #include <map>
 #include <sstream>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include <vector>
 
 typedef unsigned int uint;
