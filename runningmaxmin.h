@@ -38,7 +38,6 @@ public:
     virtual std::vector<floattype> & getminvalues() = 0;
 
     virtual ~minmaxfilter() = default;
-    ;
 };
 
 /**
