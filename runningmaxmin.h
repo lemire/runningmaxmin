@@ -16,28 +16,18 @@
 #ifndef RUNNINGMAXMIN_H
 #define RUNNINGMAXMIN_H
 
+#include <algorithm>
+#include <cassert>
+#include <cstdlib>
+#include <deque>
+#include <iostream>
+#include <vector>
+
 #include "common.h"
 #include "deque.h"
 
-inline uint max(uint a, uint b) {
-    if (a > b)
-        return a;
-    return b;
-}
-inline uint min(uint a, uint b) {
-    if (a < b)
-        return a;
-    return b;
-}
-
-inline void display(std::deque<int> & a) {
-    for (int i : a)
-        std::cout << i << " ";
-    std::cout << std::endl;
-}
-
-inline void display(std::vector<floattype> & a) {
-    for (double i : a)
+inline void display(const std::vector<floattype> & a) {
+    for (floattype i : a)
         std::cout << i << " ";
     std::cout << std::endl;
 }
@@ -47,7 +37,8 @@ public:
     virtual std::vector<floattype> & getmaxvalues() = 0;
     virtual std::vector<floattype> & getminvalues() = 0;
 
-    virtual ~minmaxfilter()= default;;
+    virtual ~minmaxfilter() = default;
+    ;
 };
 
 /**
@@ -96,9 +87,10 @@ public:
         std::vector<floattype> S(array.size() + 1);
         computePrefixSuffixMax(R, S, array,
                                width); // implements the cut in the middle trick
-        for (int j = 0; j < static_cast<int>(array.size()) - width + 1; j += width) {
+        for (int j = 0; j < static_cast<int>(array.size()) - width + 1;
+             j += width) {
             const int endofblock =
-                min(j + width, static_cast<int>(array.size()) - width + 1);
+                std::min(j + width, static_cast<int>(array.size()) - width + 1);
             int begin = j;
             int end = endofblock;
             int midpoint = (end - begin + 1) / 2 + begin;
@@ -120,9 +112,10 @@ public:
         }
         computePrefixSuffixMin(R, S, array,
                                width); // implements the cut in the middle trick
-        for (int j = 0; j < static_cast<int>(array.size()) - width + 1; j += width) {
+        for (int j = 0; j < static_cast<int>(array.size()) - width + 1;
+             j += width) {
             const int endofblock =
-                min(j + width, static_cast<int>(array.size()) - width + 1);
+                std::min(j + width, static_cast<int>(array.size()) - width + 1);
             int begin = j;
             int end = endofblock;
             int midpoint = (end - begin + 1) / 2 + begin;
@@ -149,24 +142,24 @@ public:
                                 const int width) {
         for (int j = 0; j < static_cast<int>(array.size()); j += width) {
             const int begin = j;
-            const int end = min(static_cast<int>(array.size()), j + width);
+            const int end = std::min(static_cast<int>(array.size()), j + width);
             const int midpoint = (end - begin + 1) / 2 + begin;
             S[begin] = array[begin];
             for (int jj = begin + 1; jj < midpoint; ++jj) {
-                S[jj] = max(array[jj], S[jj - 1]);
+                S[jj] = std::max(array[jj], S[jj - 1]);
             }
             R[end - 1] = array[end - 1];
             for (int jj = end - 2; jj >= midpoint; --jj) {
-                R[jj] = max(R[jj + 1], array[jj]);
+                R[jj] = std::max(R[jj + 1], array[jj]);
             }
-            if (max(R[midpoint], S[midpoint - 1]) == R[midpoint]) {
+            if (std::max(R[midpoint], S[midpoint - 1]) == R[midpoint]) {
                 for (int jj = midpoint; jj < end; ++jj)
-                    S[jj] = max(array[jj], S[jj - 1]);
+                    S[jj] = std::max(array[jj], S[jj - 1]);
                 for (int jj = midpoint - 1; jj >= begin; --jj)
                     R[jj] = R[midpoint];
             } else {
                 for (int jj = midpoint - 1; jj >= begin; --jj)
-                    R[jj] = max(R[jj + 1], array[jj]);
+                    R[jj] = std::max(R[jj + 1], array[jj]);
                 for (int jj = midpoint; jj < end; ++jj)
                     S[jj] = S[midpoint - 1];
             }
@@ -179,24 +172,24 @@ public:
                                 const int width) {
         for (int j = 0; j < static_cast<int>(array.size()); j += width) {
             const int begin = j;
-            const int end = min(static_cast<int>(array.size()), j + width);
+            const int end = std::min(static_cast<int>(array.size()), j + width);
             const int midpoint = (end - begin + 1) / 2 + begin;
             S[begin] = array[begin];
             for (int jj = begin + 1; jj < midpoint; ++jj) {
-                S[jj] = min(array[jj], S[jj - 1]);
+                S[jj] = std::min(array[jj], S[jj - 1]);
             }
             R[end - 1] = array[end - 1];
             for (int jj = end - 2; jj >= midpoint; --jj) {
-                R[jj] = min(R[jj + 1], array[jj]);
+                R[jj] = std::min(R[jj + 1], array[jj]);
             }
-            if (min(R[midpoint], S[midpoint - 1]) == R[midpoint]) {
+            if (std::min(R[midpoint], S[midpoint - 1]) == R[midpoint]) {
                 for (int jj = midpoint; jj < end; ++jj)
-                    S[jj] = min(array[jj], S[jj - 1]);
+                    S[jj] = std::min(array[jj], S[jj - 1]);
                 for (int jj = midpoint - 1; jj >= begin; --jj)
                     R[jj] = R[midpoint];
             } else {
                 for (int jj = midpoint - 1; jj >= begin; --jj)
-                    R[jj] = min(R[jj + 1], array[jj]);
+                    R[jj] = std::min(R[jj + 1], array[jj]);
                 for (int jj = midpoint; jj < end; ++jj)
                     S[jj] = S[midpoint - 1];
             }
@@ -223,30 +216,34 @@ public:
         std::vector<floattype> R(width);
         std::vector<floattype> S(width);
         for (uint j = 0; j < array.size() - width + 1; j += width) {
-            uint Rpos = min(j + width - 1, array.size() - 1);
+            uint Rpos = std::min(j + width - 1,
+                                 static_cast<unsigned>(array.size() - 1));
             R[0] = array[Rpos];
             for (uint i = Rpos - 1; i + 1 > j; i -= 1)
-                R[Rpos - i] = max(R[Rpos - i - 1], array[i]);
+                R[Rpos - i] = std::max(R[Rpos - i - 1], array[i]);
             S[0] = array[Rpos];
-            uint m1 = min(j + 2 * width - 1, array.size());
+            uint m1 = std::min(j + 2 * width - 1,
+                               static_cast<unsigned>(array.size()));
             for (uint i = Rpos + 1; i < m1; ++i) {
-                S[i - Rpos] = max(S[i - Rpos - 1], array[i]);
+                S[i - Rpos] = std::max(S[i - Rpos - 1], array[i]);
             }
             for (uint i = 0; i < m1 - Rpos; i += 1)
-                maxvalues[j + i] = max(S[i], R[(Rpos - j + 1) - i - 1]);
+                maxvalues[j + i] = std::max(S[i], R[(Rpos - j + 1) - i - 1]);
         }
         for (uint j = 0; j < array.size() - width + 1; j += width) {
-            uint Rpos = min(j + width - 1, array.size() - 1);
+            uint Rpos = std::min(j + width - 1,
+                                 static_cast<unsigned>(array.size() - 1));
             R[0] = array[Rpos];
             for (uint i = Rpos - 1; i + 1 > j; i -= 1)
-                R[Rpos - i] = min(R[Rpos - i - 1], array[i]);
+                R[Rpos - i] = std::min(R[Rpos - i - 1], array[i]);
             S[0] = array[Rpos];
-            uint m1 = min(j + 2 * width - 1, array.size());
+            uint m1 = std::min(j + 2 * width - 1,
+                               static_cast<unsigned>(array.size()));
             for (uint i = Rpos + 1; i < m1; ++i) {
-                S[i - Rpos] = min(S[i - Rpos - 1], array[i]);
+                S[i - Rpos] = std::min(S[i - Rpos - 1], array[i]);
             }
             for (uint i = 0; i < m1 - Rpos; i += 1)
-                minvalues[j + i] = min(S[i], R[(Rpos - j + 1) - i - 1]);
+                minvalues[j + i] = std::min(S[i], R[(Rpos - j + 1) - i - 1]);
         }
         assert(maxvalues.size() == array.size() - width + 1);
         assert(minvalues.size() == array.size() - width + 1);
@@ -342,7 +339,8 @@ public:
 // actual streaming implementation
 class lemiremaxmintruestreaming {
 public:
-    explicit lemiremaxmintruestreaming(uint width) : up(), lo(), n(0), ww(width) {
+    explicit lemiremaxmintruestreaming(uint width)
+        : up(), lo(), n(0), ww(width) {
         init(&up, ww);
         init(&lo, ww);
     }

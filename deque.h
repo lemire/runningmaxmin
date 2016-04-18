@@ -31,7 +31,8 @@ inline uint count(intfloatqueue * q) {
 
 inline void init(intfloatqueue * q, uint size) {
     size = nextPowerOfTwo(size + 1);
-    q->nodes = reinterpret_cast<intfloatnode *>(malloc(sizeof(intfloatnode) * size));
+    q->nodes =
+        reinterpret_cast<intfloatnode *>(malloc(sizeof(intfloatnode) * size));
     q->head = 0;
     q->tail = 0;
     q->mask = size - 1;

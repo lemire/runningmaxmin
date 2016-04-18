@@ -1,10 +1,9 @@
+#include "runningmaxmin.h"
+
 #include <cmath>
-#include <cstdlib>
+#include <cstring>
 #include <ctime>
 #include <iomanip>
-#include <iostream>
-
-#include "runningmaxmin.h"
 
 bool compare(std::vector<floattype> & a, std::vector<floattype> & b) {
     if (a.size() != b.size())
@@ -16,7 +15,8 @@ bool compare(std::vector<floattype> & a, std::vector<floattype> & b) {
 }
 bool compare(minmaxfilter & a, minmaxfilter & b) {
     return static_cast<int>((compare(a.getmaxvalues(), b.getmaxvalues())) &
-           static_cast<int>(compare(a.getminvalues(), b.getminvalues()))) != 0;
+                            static_cast<int>(compare(a.getminvalues(),
+                                                     b.getminvalues()))) != 0;
 }
 
 void display(minmaxfilter & a) {
@@ -252,19 +252,22 @@ void timingsline(std::vector<floattype> data, uint width = 30,
         for (uint i = 0; i < 30; ++i)
             slowmaxmin A(data, width);
     finish = clock();
-    std::cout << "slow = " << static_cast<double>(finish - start) / CLOCKS_PER_SEC
+    std::cout << "slow = "
+              << static_cast<double>(finish - start) / CLOCKS_PER_SEC
               << std::endl;
     start = clock();
     for (uint i = 0; i < 30; ++i)
         vanHerkGilWermanmaxmin B(data, width);
     finish = clock();
-    std::cout << "vanHerk = " << static_cast<double>(finish - start) / CLOCKS_PER_SEC
+    std::cout << "vanHerk = "
+              << static_cast<double>(finish - start) / CLOCKS_PER_SEC
               << std::endl;
     start = clock();
     for (uint i = 0; i < 30; ++i)
         lemiremaxmin C(data, width);
     finish = clock();
-    std::cout << "lemire = " << static_cast<double>(finish - start) / CLOCKS_PER_SEC
+    std::cout << "lemire = "
+              << static_cast<double>(finish - start) / CLOCKS_PER_SEC
               << std::endl;
     std::cout << "------------" << std::endl;
 }
