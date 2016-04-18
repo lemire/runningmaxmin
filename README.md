@@ -11,6 +11,9 @@ A preprint is available there:
 
 http://arxiv.org/abs/cs.DS/0610046
 
+
+Contributors: Daniel Lemire, Kai Wolf
+
 Usage
 ----- 
 
