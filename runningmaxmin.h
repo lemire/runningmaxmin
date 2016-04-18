@@ -1,8 +1,7 @@
 /**
  * Copyright 2006-..., Daniel Lemire
  * Streaming Maximum-Minimum Filter Using No More than 3 Comparisons per Element
- */
-/**
+ *
  *  This program is free software; you can
  *  redistribute it and/or modify it under the terms of the GNU General Public
  *  License as published by the Free Software Foundation (version 2). This
@@ -20,8 +19,6 @@
 #include "common.h"
 #include "deque.h"
 
-using namespace std;
-
 uint max(uint a, uint b) {
     if (a > b)
         return a;
@@ -33,23 +30,23 @@ uint min(uint a, uint b) {
     return b;
 }
 
-void display(deque<int> & a) {
+void display(std::deque<int> & a) {
     for (uint i = 0; i < a.size(); ++i)
-        cout << a[i] << " ";
-    cout << endl;
+        std::cout << a[i] << " ";
+    std::cout << std::endl;
 }
 
-void display(vector<floattype> & a) {
+void display(std::vector<floattype> & a) {
     for (uint i = 0; i < a.size(); ++i)
-        cout << a[i] << " ";
-    cout << endl;
+        std::cout << a[i] << " ";
+    std::cout << std::endl;
 }
 
 class minmaxfilter {
 public:
 
-    virtual vector<floattype>& getmaxvalues()=0;
-    virtual vector<floattype>& getminvalues()=0;
+    virtual std::vector<floattype>& getmaxvalues()=0;
+    virtual std::vector<floattype>& getminvalues()=0;
 
     virtual ~minmaxfilter() {
     }
@@ -61,7 +58,7 @@ public:
  */
 class slowmaxmin: public minmaxfilter {
 public:
-    slowmaxmin(vector<floattype> & array, int width) :
+    slowmaxmin(std::vector<floattype> & array, int width) :
         maxvalues(array.size() - width + 1),
         minvalues(array.size() - width + 1) {
         floattype maxvalue, minvalue;
@@ -79,14 +76,14 @@ public:
             minvalues[s] = minvalue;
         }
     }
-    vector<floattype> & getmaxvalues() {
+    std::vector<floattype> & getmaxvalues() {
         return maxvalues;
     }
-    vector<floattype> & getminvalues() {
+    std::vector<floattype> & getminvalues() {
         return minvalues;
     }
-    vector<floattype> maxvalues;
-    vector<floattype> minvalues;
+    std::vector<floattype> maxvalues;
+    std::vector<floattype> minvalues;
 };
 
 /**
@@ -95,11 +92,11 @@ public:
  */
 class GilKimmel: public minmaxfilter {
 public:
-    GilKimmel(vector<floattype> & array, int width) :
+    GilKimmel(std::vector<floattype> & array, int width) :
         maxvalues(array.size() - width + 1),
         minvalues(array.size() - width + 1) {
-        vector<floattype> R(array.size() + 1);
-        vector<floattype> S(array.size() + 1);
+        std::vector<floattype> R(array.size() + 1);
+        std::vector<floattype> S(array.size() + 1);
         computePrefixSuffixMax(R, S, array, width);// implements the cut in the middle trick
         for (int j = 0; j < (int) array.size() - width + 1; j += width) {
             const int endofblock = min(j + width,
@@ -147,8 +144,8 @@ public:
             }
         }
     }
-    void computePrefixSuffixMax(vector<floattype>& R, vector<floattype>& S,
-                                const vector<floattype> & array, const int width) {
+    void computePrefixSuffixMax(std::vector<floattype>& R, std::vector<floattype>& S,
+                                const std::vector<floattype> & array, const int width) {
         for (int j = 0; j < (int) array.size(); j += width) {
             const int begin = j;
             const int end = min((int) array.size(), j + width);
@@ -175,8 +172,8 @@ public:
         }
     }
 
-    void computePrefixSuffixMin(vector<floattype>& R, vector<floattype>& S,
-                                const vector<floattype> & array, const int width) {
+    void computePrefixSuffixMin(std::vector<floattype>& R, std::vector<floattype>& S,
+                                const std::vector<floattype> & array, const int width) {
         for (int j = 0; j < (int) array.size(); j += width) {
             const int begin = j;
             const int end = min((int) array.size(), j + width);
@@ -202,14 +199,14 @@ public:
             }
         }
     }
-    vector<floattype> & getmaxvalues() {
+    std::vector<floattype> & getmaxvalues() {
         return maxvalues;
     }
-    vector<floattype> & getminvalues() {
+    std::vector<floattype> & getminvalues() {
         return minvalues;
     }
-    vector<floattype> maxvalues;
-    vector<floattype> minvalues;
+    std::vector<floattype> maxvalues;
+    std::vector<floattype> minvalues;
 };
 
 /**
@@ -217,11 +214,11 @@ public:
  */
 class vanHerkGilWermanmaxmin: public minmaxfilter {
 public:
-    vanHerkGilWermanmaxmin(vector<floattype> & array, int width) :
+    vanHerkGilWermanmaxmin(std::vector<floattype> & array, int width) :
         maxvalues(array.size() - width + 1),
         minvalues(array.size() - width + 1) {
-        vector<floattype> R(width);
-        vector<floattype> S(width);
+        std::vector<floattype> R(width);
+        std::vector<floattype> S(width);
         for (uint j = 0; j < array.size() - width + 1; j += width) {
             uint Rpos = min(j + width - 1, array.size() - 1);
             R[0] = array[Rpos];
@@ -253,14 +250,14 @@ public:
         assert(maxvalues.size() == array.size() - width + 1);
         assert(minvalues.size() == array.size() - width + 1);
     }
-    vector<floattype> & getmaxvalues() {
+    std::vector<floattype> & getmaxvalues() {
         return maxvalues;
     }
-    vector<floattype> & getminvalues() {
+    std::vector<floattype> & getminvalues() {
         return minvalues;
     }
-    vector<floattype> maxvalues;
-    vector<floattype> minvalues;
+    std::vector<floattype> maxvalues;
+    std::vector<floattype> minvalues;
 };
 
 /**
@@ -268,10 +265,10 @@ public:
  */
 class lemiremaxmin: public minmaxfilter {
 public:
-    lemiremaxmin(vector<floattype> & array, uint width) :
+    lemiremaxmin(std::vector<floattype> & array, uint width) :
         maxvalues(array.size() - width + 1),
         minvalues(array.size() - width + 1) {
-        deque<int> maxfifo, minfifo;
+        std::deque<int> maxfifo, minfifo;
         for (uint i = 1; i < width; ++i) {
             if (array[i] > array[i - 1]) { //overshoot
                 minfifo.push_back(i - 1);
@@ -331,14 +328,14 @@ public:
         minvalues[array.size() - width]
             = array[minfifo.empty() ? array.size() - 1 : minfifo.front() ];
     }
-    vector<floattype> & getmaxvalues() {
+    std::vector<floattype> & getmaxvalues() {
         return maxvalues;
     }
-    vector<floattype> & getminvalues() {
+    std::vector<floattype> & getminvalues() {
         return minvalues;
     }
-    vector<floattype> maxvalues;
-    vector<floattype> minvalues;
+    std::vector<floattype> maxvalues;
+    std::vector<floattype> minvalues;
 };
 
 
@@ -400,7 +397,7 @@ public:
 // wrapper over the streaming version
 class lemiremaxminwrap: public minmaxfilter {
 public:
-    lemiremaxminwrap(vector<floattype> & array, uint width) :
+    lemiremaxminwrap(std::vector<floattype> & array, uint width) :
         maxvalues(array.size() - width + 1),
         minvalues(array.size() - width + 1) {
         lemiremaxmintruestreaming lts (width);
@@ -413,14 +410,14 @@ public:
             minvalues[i - width + 1]  = lts.min();
         }
     }
-    vector<floattype> & getmaxvalues() {
+    std::vector<floattype> & getmaxvalues() {
         return maxvalues;
     }
-    vector<floattype> & getminvalues() {
+    std::vector<floattype> & getminvalues() {
         return minvalues;
     }
-    vector<floattype> maxvalues;
-    vector<floattype> minvalues;
+    std::vector<floattype> maxvalues;
+    std::vector<floattype> minvalues;
 };
 
 
@@ -432,7 +429,7 @@ class lemirebitmapmaxmin: public minmaxfilter {
 public:
     //TODO: make the code portable to non-GCC-like compilers
     //TODO: extend beyond 64-bit to include 128-bit
-    lemirebitmapmaxmin(vector<floattype> & array, const uint width) :
+    lemirebitmapmaxmin(std::vector<floattype> & array, const uint width) :
         maxvalues(array.size() - width + 1),
         minvalues(array.size() - width + 1) {
         assert(width <= sizeof(unsigned long)*8);
@@ -519,14 +516,14 @@ public:
         else
             minvalues[array.size() - width] = array[ array.size()  - ( sizeof(unsigned long)*8 - __builtin_clzl(minfifo)) ];
     }
-    vector<floattype> & getmaxvalues() {
+    std::vector<floattype> & getmaxvalues() {
         return maxvalues;
     }
-    vector<floattype> & getminvalues() {
+    std::vector<floattype> & getminvalues() {
         return minvalues;
     }
-    vector<floattype> maxvalues;
-    vector<floattype> minvalues;
+    std::vector<floattype> maxvalues;
+    std::vector<floattype> minvalues;
 };
 
 
@@ -535,10 +532,10 @@ public:
  */
 class simplelemiremaxmin: public minmaxfilter {
 public:
-    simplelemiremaxmin(vector<floattype> & array, uint width) :
+    simplelemiremaxmin(std::vector<floattype> & array, uint width) :
         maxvalues(array.size() - width + 1),
         minvalues(array.size() - width + 1) {
-        deque<int> maxfifo, minfifo;
+        std::deque<int> maxfifo, minfifo;
         maxfifo.push_back(0);
         minfifo.push_back(0);
         for (uint i = 1; i < width; ++i) {
@@ -588,14 +585,14 @@ public:
         maxvalues[array.size() - width] = array[maxfifo.front()];
         minvalues[array.size() - width] = array[minfifo.front()];
     }
-    vector<floattype> & getmaxvalues() {
+    std::vector<floattype> & getmaxvalues() {
         return maxvalues;
     }
-    vector<floattype> & getminvalues() {
+    std::vector<floattype> & getminvalues() {
         return minvalues;
     }
-    vector<floattype> maxvalues;
-    vector<floattype> minvalues;
+    std::vector<floattype> maxvalues;
+    std::vector<floattype> minvalues;
 };
 
 #endif
