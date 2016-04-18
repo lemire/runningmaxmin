@@ -1,10 +1,10 @@
 #include <cmath>
+#include <cstdlib>
+#include <ctime>
 #include <iomanip>
 #include <iostream>
 
 #include "runningmaxmin.h"
-#include <cstdlib>
-#include <ctime>
 
 bool compare(std::vector<floattype> & a, std::vector<floattype> & b) {
     if (a.size() != b.size())
