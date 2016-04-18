@@ -4,7 +4,6 @@
 
 #include "common.h"
 
-
 // nextPowerOfTwo returns a power of two that is larger or equal than x.
 uint nextPowerOfTwo(uint x) {
     uint result = 1;
@@ -18,7 +17,6 @@ struct intfloatnode {
     uint index;
     floattype value;
 };
-
 
 struct intfloatqueue {
     intfloatnode * nodes;
@@ -53,9 +51,8 @@ void push(intfloatqueue * q, uint index, floattype value) {
     q->tail = (q->tail + 1) & q->mask;
 }
 
-
-floattype tailvalue(intfloatqueue * q)  {
-    return q->nodes[(q->tail-1)&q->mask].value;
+floattype tailvalue(intfloatqueue * q) {
+    return q->nodes[(q->tail - 1) & q->mask].value;
 }
 
 floattype headvalue(intfloatqueue * q) {
@@ -72,6 +69,5 @@ void prunetail(intfloatqueue * q) {
 int nonempty(intfloatqueue * q) {
     return q->tail != q->head;
 }
-
 
 #endif

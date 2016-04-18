@@ -44,23 +44,20 @@ void display(std::vector<floattype> & a) {
 
 class minmaxfilter {
 public:
+    virtual std::vector<floattype> & getmaxvalues() = 0;
+    virtual std::vector<floattype> & getminvalues() = 0;
 
-    virtual std::vector<floattype>& getmaxvalues()=0;
-    virtual std::vector<floattype>& getminvalues()=0;
-
-    virtual ~minmaxfilter() {
-    }
-    ;
+    virtual ~minmaxfilter(){};
 };
 
 /**
  * This is the naive algorithm one might try first.
  */
-class slowmaxmin: public minmaxfilter {
+class slowmaxmin : public minmaxfilter {
 public:
-    slowmaxmin(std::vector<floattype> & array, int width) :
-        maxvalues(array.size() - width + 1),
-        minvalues(array.size() - width + 1) {
+    slowmaxmin(std::vector<floattype> & array, int width)
+        : maxvalues(array.size() - width + 1),
+          minvalues(array.size() - width + 1) {
         floattype maxvalue, minvalue;
         for (uint s = 0; s < array.size() - width + 1; ++s) {
             maxvalue = array[s];
@@ -90,17 +87,18 @@ public:
  * This is an implementation of the patented Gil-Kimmel algorithm.
  * Could be rewritten to use less memory.
  */
-class GilKimmel: public minmaxfilter {
+class GilKimmel : public minmaxfilter {
 public:
-    GilKimmel(std::vector<floattype> & array, int width) :
-        maxvalues(array.size() - width + 1),
-        minvalues(array.size() - width + 1) {
+    GilKimmel(std::vector<floattype> & array, int width)
+        : maxvalues(array.size() - width + 1),
+          minvalues(array.size() - width + 1) {
         std::vector<floattype> R(array.size() + 1);
         std::vector<floattype> S(array.size() + 1);
-        computePrefixSuffixMax(R, S, array, width);// implements the cut in the middle trick
-        for (int j = 0; j < (int) array.size() - width + 1; j += width) {
-            const int endofblock = min(j + width,
-                                       (int) array.size() - width + 1);
+        computePrefixSuffixMax(R, S, array,
+                               width); // implements the cut in the middle trick
+        for (int j = 0; j < (int)array.size() - width + 1; j += width) {
+            const int endofblock =
+                min(j + width, (int)array.size() - width + 1);
             int begin = j;
             int end = endofblock;
             int midpoint = (end - begin + 1) / 2 + begin;
@@ -120,10 +118,11 @@ public:
                 maxvalues[jj] = S[jj + width - 1];
             }
         }
-        computePrefixSuffixMin(R, S, array, width);// implements the cut in the middle trick
-        for (int j = 0; j < (int) array.size() - width + 1; j += width) {
-            const int endofblock = min(j + width,
-                                       (int) array.size() - width + 1);
+        computePrefixSuffixMin(R, S, array,
+                               width); // implements the cut in the middle trick
+        for (int j = 0; j < (int)array.size() - width + 1; j += width) {
+            const int endofblock =
+                min(j + width, (int)array.size() - width + 1);
             int begin = j;
             int end = endofblock;
             int midpoint = (end - begin + 1) / 2 + begin;
@@ -144,11 +143,13 @@ public:
             }
         }
     }
-    void computePrefixSuffixMax(std::vector<floattype>& R, std::vector<floattype>& S,
-                                const std::vector<floattype> & array, const int width) {
-        for (int j = 0; j < (int) array.size(); j += width) {
+    void computePrefixSuffixMax(std::vector<floattype> & R,
+                                std::vector<floattype> & S,
+                                const std::vector<floattype> & array,
+                                const int width) {
+        for (int j = 0; j < (int)array.size(); j += width) {
             const int begin = j;
-            const int end = min((int) array.size(), j + width);
+            const int end = min((int)array.size(), j + width);
             const int midpoint = (end - begin + 1) / 2 + begin;
             S[begin] = array[begin];
             for (int jj = begin + 1; jj < midpoint; ++jj) {
@@ -172,11 +173,13 @@ public:
         }
     }
 
-    void computePrefixSuffixMin(std::vector<floattype>& R, std::vector<floattype>& S,
-                                const std::vector<floattype> & array, const int width) {
-        for (int j = 0; j < (int) array.size(); j += width) {
+    void computePrefixSuffixMin(std::vector<floattype> & R,
+                                std::vector<floattype> & S,
+                                const std::vector<floattype> & array,
+                                const int width) {
+        for (int j = 0; j < (int)array.size(); j += width) {
             const int begin = j;
-            const int end = min((int) array.size(), j + width);
+            const int end = min((int)array.size(), j + width);
             const int midpoint = (end - begin + 1) / 2 + begin;
             S[begin] = array[begin];
             for (int jj = begin + 1; jj < midpoint; ++jj) {
@@ -212,11 +215,11 @@ public:
 /**
  * This should be very close to the van Herk algorithm.
  */
-class vanHerkGilWermanmaxmin: public minmaxfilter {
+class vanHerkGilWermanmaxmin : public minmaxfilter {
 public:
-    vanHerkGilWermanmaxmin(std::vector<floattype> & array, int width) :
-        maxvalues(array.size() - width + 1),
-        minvalues(array.size() - width + 1) {
+    vanHerkGilWermanmaxmin(std::vector<floattype> & array, int width)
+        : maxvalues(array.size() - width + 1),
+          minvalues(array.size() - width + 1) {
         std::vector<floattype> R(width);
         std::vector<floattype> S(width);
         for (uint j = 0; j < array.size() - width + 1; j += width) {
@@ -226,11 +229,10 @@ public:
                 R[Rpos - i] = max(R[Rpos - i - 1], array[i]);
             S[0] = array[Rpos];
             uint m1 = min(j + 2 * width - 1, array.size());
-            for (uint i = Rpos + 1; i < m1 ; ++i) {
+            for (uint i = Rpos + 1; i < m1; ++i) {
                 S[i - Rpos] = max(S[i - Rpos - 1], array[i]);
             }
-            for (uint i = 0; i < m1 - Rpos; i
-                    += 1)
+            for (uint i = 0; i < m1 - Rpos; i += 1)
                 maxvalues[j + i] = max(S[i], R[(Rpos - j + 1) - i - 1]);
         }
         for (uint j = 0; j < array.size() - width + 1; j += width) {
@@ -240,11 +242,10 @@ public:
                 R[Rpos - i] = min(R[Rpos - i - 1], array[i]);
             S[0] = array[Rpos];
             uint m1 = min(j + 2 * width - 1, array.size());
-            for (uint i = Rpos + 1; i < m1 ; ++i) {
+            for (uint i = Rpos + 1; i < m1; ++i) {
                 S[i - Rpos] = min(S[i - Rpos - 1], array[i]);
             }
-            for (uint i = 0; i < m1 - Rpos; i
-                    += 1)
+            for (uint i = 0; i < m1 - Rpos; i += 1)
                 minvalues[j + i] = min(S[i], R[(Rpos - j + 1) - i - 1]);
         }
         assert(maxvalues.size() == array.size() - width + 1);
@@ -263,14 +264,14 @@ public:
 /**
  * implementation of the streaming algorithm
  */
-class lemiremaxmin: public minmaxfilter {
+class lemiremaxmin : public minmaxfilter {
 public:
-    lemiremaxmin(std::vector<floattype> & array, uint width) :
-        maxvalues(array.size() - width + 1),
-        minvalues(array.size() - width + 1) {
+    lemiremaxmin(std::vector<floattype> & array, uint width)
+        : maxvalues(array.size() - width + 1),
+          minvalues(array.size() - width + 1) {
         std::deque<int> maxfifo, minfifo;
         for (uint i = 1; i < width; ++i) {
-            if (array[i] > array[i - 1]) { //overshoot
+            if (array[i] > array[i - 1]) { // overshoot
                 minfifo.push_back(i - 1);
                 while (!maxfifo.empty()) {
                     if (array[i] <= array[maxfifo.back()]) {
@@ -293,11 +294,11 @@ public:
             }
         }
         for (uint i = width; i < array.size(); ++i) {
-            maxvalues[i - width]
-                = array[maxfifo.empty() ? i - 1 : maxfifo.front()];
-            minvalues[i - width]
-                = array[minfifo.empty() ? i - 1 : minfifo.front()];
-            if (array[i] > array[i - 1]) { //overshoot
+            maxvalues[i - width] =
+                array[maxfifo.empty() ? i - 1 : maxfifo.front()];
+            minvalues[i - width] =
+                array[minfifo.empty() ? i - 1 : minfifo.front()];
+            if (array[i] > array[i - 1]) { // overshoot
                 minfifo.push_back(i - 1);
                 if (i == width + minfifo.front())
                     minfifo.pop_front();
@@ -323,10 +324,10 @@ public:
                 }
             }
         }
-        maxvalues[array.size() - width]
-            = array[maxfifo.empty() ? array.size() - 1 : maxfifo.front() ];
-        minvalues[array.size() - width]
-            = array[minfifo.empty() ? array.size() - 1 : minfifo.front() ];
+        maxvalues[array.size() - width] =
+            array[maxfifo.empty() ? array.size() - 1 : maxfifo.front()];
+        minvalues[array.size() - width] =
+            array[minfifo.empty() ? array.size() - 1 : minfifo.front()];
     }
     std::vector<floattype> & getmaxvalues() {
         return maxvalues;
@@ -338,14 +339,12 @@ public:
     std::vector<floattype> minvalues;
 };
 
-
 // actual streaming implementation
 class lemiremaxmintruestreaming {
 public:
     lemiremaxmintruestreaming(uint width) : up(), lo(), n(0), ww(width) {
         init(&up, ww);
         init(&lo, ww);
-
     }
 
     ~lemiremaxmintruestreaming() {
@@ -353,32 +352,30 @@ public:
         free(&lo);
     }
 
-
     void update(floattype value) {
-        if ( nonempty(&up) ) {
-            if ( value > tailvalue(&up) ) {
+        if (nonempty(&up)) {
+            if (value > tailvalue(&up)) {
                 prunetail(&up);
                 while ((nonempty(&up)) && (value >= tailvalue(&up))) {
                     prunetail(&up);
                 }
             } else {
                 prunetail(&lo);
-                while ( (nonempty(&lo)) && (value <= tailvalue(&lo))) {
+                while ((nonempty(&lo)) && (value <= tailvalue(&lo))) {
                     prunetail(&lo);
                 }
             }
         }
         push(&up, n, value);
-        if ( n == ww + headindex(&up) ) {
+        if (n == ww + headindex(&up)) {
             prunehead(&up);
         }
 
         push(&lo, n, value);
-        if ( n == ww+headindex(&lo) )  {
+        if (n == ww + headindex(&lo)) {
             prunehead(&lo);
         }
         n++;
-
     }
 
     floattype max() {
@@ -395,19 +392,19 @@ public:
 };
 
 // wrapper over the streaming version
-class lemiremaxminwrap: public minmaxfilter {
+class lemiremaxminwrap : public minmaxfilter {
 public:
-    lemiremaxminwrap(std::vector<floattype> & array, uint width) :
-        maxvalues(array.size() - width + 1),
-        minvalues(array.size() - width + 1) {
-        lemiremaxmintruestreaming lts (width);
+    lemiremaxminwrap(std::vector<floattype> & array, uint width)
+        : maxvalues(array.size() - width + 1),
+          minvalues(array.size() - width + 1) {
+        lemiremaxmintruestreaming lts(width);
         for (uint i = 0; i < width - 1; ++i) {
             lts.update(array[i]);
         }
         for (uint i = width - 1; i < array.size(); ++i) {
             lts.update(array[i]);
             maxvalues[i - width + 1] = lts.max();
-            minvalues[i - width + 1]  = lts.min();
+            minvalues[i - width + 1] = lts.min();
         }
     }
     std::vector<floattype> & getmaxvalues() {
@@ -419,102 +416,106 @@ public:
     std::vector<floattype> maxvalues;
     std::vector<floattype> minvalues;
 };
-
-
 
 /**
  * implementation of the streaming algorithm
  */
-class lemirebitmapmaxmin: public minmaxfilter {
+class lemirebitmapmaxmin : public minmaxfilter {
 public:
-    //TODO: make the code portable to non-GCC-like compilers
-    //TODO: extend beyond 64-bit to include 128-bit
-    lemirebitmapmaxmin(std::vector<floattype> & array, const uint width) :
-        maxvalues(array.size() - width + 1),
-        minvalues(array.size() - width + 1) {
-        assert(width <= sizeof(unsigned long)*8);
+    // TODO: make the code portable to non-GCC-like compilers
+    // TODO: extend beyond 64-bit to include 128-bit
+    lemirebitmapmaxmin(std::vector<floattype> & array, const uint width)
+        : maxvalues(array.size() - width + 1),
+          minvalues(array.size() - width + 1) {
+        assert(width <= sizeof(unsigned long) * 8);
         unsigned long maxfifo = 0;
         unsigned long minfifo = 0;
         for (uint i = 1; i < width; ++i) {
-            if (array[i] > array[i - 1]) { //overshoot
+            if (array[i] > array[i - 1]) { // overshoot
                 minfifo |= 1;
                 minfifo <<= 1;
                 maxfifo <<= 1;
-                while (maxfifo != 0 ) {
-                        const long t = maxfifo & -maxfifo;
-                        const int bitpos = __builtin_popcountl(t - 1);
-                        if (array[i] <= array[i - bitpos]) {
-                            break;
-                        }
-                        maxfifo ^= t;
+                while (maxfifo != 0) {
+                    const long t = maxfifo & -maxfifo;
+                    const int bitpos = __builtin_popcountl(t - 1);
+                    if (array[i] <= array[i - bitpos]) {
+                        break;
+                    }
+                    maxfifo ^= t;
                 }
             } else {
                 maxfifo |= 1;
                 minfifo <<= 1;
                 maxfifo <<= 1;
-                while (minfifo != 0 ) {
-                        const long t = minfifo & -minfifo;
-                        const int bitpos = __builtin_popcountl(t - 1);
-                        if (array[i] >= array[i - bitpos]) {
-                            break;
-                        }
-                        minfifo ^= t;
+                while (minfifo != 0) {
+                    const long t = minfifo & -minfifo;
+                    const int bitpos = __builtin_popcountl(t - 1);
+                    if (array[i] >= array[i - bitpos]) {
+                        break;
+                    }
+                    minfifo ^= t;
                 }
             }
         }
         unsigned long mask = ~0l;
-        if(width < sizeof(unsigned long)*8) {
-            mask = (1UL<<width) - 1;
+        if (width < sizeof(unsigned long) * 8) {
+            mask = (1UL << width) - 1;
         }
         for (uint i = width; i < array.size(); ++i) {
             maxfifo &= mask;
             minfifo &= mask;
-            if(maxfifo == 0)
-                maxvalues[i - width] = array[ i - 1 ];
+            if (maxfifo == 0)
+                maxvalues[i - width] = array[i - 1];
             else {
-                maxvalues[i - width] = array[ i - ( sizeof(unsigned long)*8 - __builtin_clzl(maxfifo)) ];
+                maxvalues[i - width] = array[i - (sizeof(unsigned long) * 8 -
+                                                  __builtin_clzl(maxfifo))];
             }
-            if(minfifo == 0)
-                minvalues[i - width] = array[ i - 1 ];
+            if (minfifo == 0)
+                minvalues[i - width] = array[i - 1];
             else {
-                minvalues[i - width] = array[ i - ( sizeof(unsigned long)*8 - __builtin_clzl(minfifo)) ];
+                minvalues[i - width] = array[i - (sizeof(unsigned long) * 8 -
+                                                  __builtin_clzl(minfifo))];
             }
-            if (array[i] > array[i - 1]) { //overshoot
+            if (array[i] > array[i - 1]) { // overshoot
                 minfifo |= 1;
                 minfifo <<= 1;
                 maxfifo <<= 1;
-                while (maxfifo != 0 ) {
-                        const long t = maxfifo & -maxfifo;
-                        const int bitpos = __builtin_popcountl(t - 1);
-                        if (array[i] <= array[i - bitpos]) {
-                            break;
-                        }
-                        maxfifo ^= t;
+                while (maxfifo != 0) {
+                    const long t = maxfifo & -maxfifo;
+                    const int bitpos = __builtin_popcountl(t - 1);
+                    if (array[i] <= array[i - bitpos]) {
+                        break;
+                    }
+                    maxfifo ^= t;
                 }
             } else {
                 maxfifo |= 1;
                 maxfifo <<= 1;
                 minfifo <<= 1;
-                while (minfifo != 0 ) {
-                        const long t = minfifo & -minfifo;
-                        const int bitpos = __builtin_popcountl(t - 1);
-                        if (array[i] >= array[i - bitpos]) {
-                            break;
-                        }
-                        minfifo ^= t;
+                while (minfifo != 0) {
+                    const long t = minfifo & -minfifo;
+                    const int bitpos = __builtin_popcountl(t - 1);
+                    if (array[i] >= array[i - bitpos]) {
+                        break;
+                    }
+                    minfifo ^= t;
                 }
             }
         }
-        maxfifo=maxfifo & mask;
-        minfifo=minfifo & mask;
-        if(maxfifo == 0)
-            maxvalues[array.size() - width] = array[ array.size() - 1 ];
+        maxfifo = maxfifo & mask;
+        minfifo = minfifo & mask;
+        if (maxfifo == 0)
+            maxvalues[array.size() - width] = array[array.size() - 1];
         else
-            maxvalues[array.size() - width] = array[ array.size() -  ( sizeof(unsigned long)*8 - __builtin_clzl(maxfifo)) ];
-        if(minfifo == 0)
-            minvalues[array.size() - width] = array[ array.size() - 1 ];
+            maxvalues[array.size() - width] =
+                array[array.size() -
+                      (sizeof(unsigned long) * 8 - __builtin_clzl(maxfifo))];
+        if (minfifo == 0)
+            minvalues[array.size() - width] = array[array.size() - 1];
         else
-            minvalues[array.size() - width] = array[ array.size()  - ( sizeof(unsigned long)*8 - __builtin_clzl(minfifo)) ];
+            minvalues[array.size() - width] =
+                array[array.size() -
+                      (sizeof(unsigned long) * 8 - __builtin_clzl(minfifo))];
     }
     std::vector<floattype> & getmaxvalues() {
         return maxvalues;
@@ -526,20 +527,19 @@ public:
     std::vector<floattype> minvalues;
 };
 
-
 /**
  * simplest implementation (pseudocode-like)
  */
-class simplelemiremaxmin: public minmaxfilter {
+class simplelemiremaxmin : public minmaxfilter {
 public:
-    simplelemiremaxmin(std::vector<floattype> & array, uint width) :
-        maxvalues(array.size() - width + 1),
-        minvalues(array.size() - width + 1) {
+    simplelemiremaxmin(std::vector<floattype> & array, uint width)
+        : maxvalues(array.size() - width + 1),
+          minvalues(array.size() - width + 1) {
         std::deque<int> maxfifo, minfifo;
         maxfifo.push_back(0);
         minfifo.push_back(0);
         for (uint i = 1; i < width; ++i) {
-            if (array[i] > array[i - 1]) { //overshoot
+            if (array[i] > array[i - 1]) { // overshoot
                 maxfifo.pop_back();
                 while (!maxfifo.empty()) {
                     if (array[i] <= array[maxfifo.back()])
@@ -560,7 +560,7 @@ public:
         for (uint i = width; i < array.size(); ++i) {
             maxvalues[i - width] = array[maxfifo.front()];
             minvalues[i - width] = array[minfifo.front()];
-            if (array[i] > array[i - 1]) { //overshoot
+            if (array[i] > array[i - 1]) { // overshoot
                 maxfifo.pop_back();
                 while (!maxfifo.empty()) {
                     if (array[i] <= array[maxfifo.back()])

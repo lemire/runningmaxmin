@@ -2,17 +2,17 @@
 #ifndef COMMON
 #define COMMON
 
-#include <cmath>
-#include <cassert>
-#include <vector>
-#include <deque>
-#include <map>
 #include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <deque>
+#include <fstream>
 #include <iostream>
+#include <map>
 #include <sstream>
 #include <stdlib.h>
-#include <fstream>
 #include <string.h>
+#include <vector>
 
 typedef unsigned int uint;
 
