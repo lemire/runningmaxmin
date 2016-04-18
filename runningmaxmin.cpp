@@ -1,12 +1,11 @@
-#include <cmath>
-#include <iostream>
-#include <iomanip>
-
-#include <stdlib.h>
-#include <time.h>
 #include "runningmaxmin.h"
 
-bool compare(vector<floattype> &a, vector<floattype> &b) {
+#include <cmath>
+#include <cstring>
+#include <ctime>
+#include <iomanip>
+
+bool compare(std::vector<floattype> & a, std::vector<floattype> & b) {
     if (a.size() != b.size())
         return false;
     for (uint k = 0; k < a.size(); ++k)
@@ -15,8 +14,9 @@ bool compare(vector<floattype> &a, vector<floattype> &b) {
     return true;
 }
 bool compare(minmaxfilter & a, minmaxfilter & b) {
-    return compare(a.getmaxvalues(), b.getmaxvalues()) & compare(
-               a.getminvalues(), b.getminvalues());
+    return static_cast<int>((compare(a.getmaxvalues(), b.getmaxvalues())) &
+                            static_cast<int>(compare(a.getminvalues(),
+                                                     b.getminvalues()))) != 0;
 }
 
 void display(minmaxfilter & a) {
@@ -24,7 +24,7 @@ void display(minmaxfilter & a) {
     display(a.getminvalues());
 }
 
-void test(vector<floattype> data, uint width = 3) {
+void test(std::vector<floattype> data, uint width = 3) {
 
     slowmaxmin A(data, width);
     lemiremaxmin C(data, width);
@@ -32,38 +32,38 @@ void test(vector<floattype> data, uint width = 3) {
     simplelemiremaxmin G(data, width);
     GilKimmel D(data, width);
     vanHerkGilWermanmaxmin B(data, width);
-    lemirebitmapmaxmin E(data,width);
+    lemirebitmapmaxmin E(data, width);
     if (!compare(A, Cw)) {
-        cout << "array " << endl;
+        std::cout << "array " << std::endl;
         display(data);
-        cout << "solution " << endl;
+        std::cout << "solution " << std::endl;
         display(A);
-        cout << "lemirew " << endl;
+        std::cout << "lemirew " << std::endl;
         display(Cw);
     }
 
     if (!compare(A, D)) {
-        cout << "array " << endl;
+        std::cout << "array " << std::endl;
         display(data);
-        cout << "solution " << endl;
+        std::cout << "solution " << std::endl;
         display(A);
-        cout << "lemiremaxmin " << endl;
+        std::cout << "lemiremaxmin " << std::endl;
         display(D);
     }
     if (!compare(A, C)) {
-        cout << "array " << endl;
+        std::cout << "array " << std::endl;
         display(data);
-        cout << "solution " << endl;
+        std::cout << "solution " << std::endl;
         display(A);
-        cout << "lemiremaxmin " << endl;
+        std::cout << "lemiremaxmin " << std::endl;
         display(C);
     }
     if (!compare(A, B)) {
-        cout << "array " << endl;
+        std::cout << "array " << std::endl;
         display(data);
-        cout << "solution " << endl;
+        std::cout << "solution " << std::endl;
         display(A);
-        cout << "vanHerk " << endl;
+        std::cout << "vanHerk " << std::endl;
         display(B);
     }
     assert(compare(A, Cw));
@@ -77,7 +77,7 @@ void test(vector<floattype> data, uint width = 3) {
 
 void unit() {
     uint size = 20;
-    vector<floattype> data(size);
+    std::vector<floattype> data(size);
     for (uint k = 0; k < size; ++k)
         data[k] = size - k;
     test(data, 6);
@@ -101,170 +101,175 @@ void unit() {
     }
 }
 
-vector<floattype> getwhite(uint size) {
-    vector<floattype> data(size);
+std::vector<floattype> getwhite(uint size) {
+    std::vector<floattype> data(size);
     for (uint k = 0; k < size; ++k)
         data[k] = (1.0 * rand() / (RAND_MAX)) - 0.5;
     return data;
 }
 
-vector<floattype> getrandomwalk(uint size) {
-    vector<floattype> data(size);
+std::vector<floattype> getrandomwalk(uint size) {
+    std::vector<floattype> data(size);
     data[0] = 0.0;
     for (uint k = 1; k < size; ++k)
         data[k] = (1.0 * rand() / (RAND_MAX)) - 0.5 + data[k - 1];
     return data;
 }
 
-vector<floattype> getcin() {
+std::vector<floattype> getcin() {
     float val;
-    cin >> val;
-    vector<floattype> v;
-    while (cin) {
+    std::cin >> val;
+    std::vector<floattype> v;
+    while (std::cin) {
         v.push_back(val);
-        cin >> val;
+        std::cin >> val;
     }
-    cout << "# Read " << v.size() << " data points. " << endl;
+    std::cout << "# Read " << v.size() << " data points. " << std::endl;
     return v;
 }
 
-void compareallalgos(vector<floattype> & data, vector<double> & timings,
-                     uint width, bool doslow) {
+void compareallalgos(std::vector<floattype> & data,
+                     std::vector<double> & timings, uint width, bool doslow) {
     if (timings.size() < 7)
-        timings = vector<double> (7, 0.0);
+        timings = std::vector<double>(7, 0.0);
     clock_t start, finish;
     start = clock();
     if (doslow)
         slowmaxmin A(data, width);
     finish = clock();
-    timings[0] += (double) (finish - start) / CLOCKS_PER_SEC;
+    timings[0] += static_cast<double>(finish - start) / CLOCKS_PER_SEC;
     start = clock();
     vanHerkGilWermanmaxmin B(data, width);
     finish = clock();
-    timings[1] += (double) (finish - start) / CLOCKS_PER_SEC;
+    timings[1] += static_cast<double>(finish - start) / CLOCKS_PER_SEC;
     start = clock();
     lemiremaxmin C(data, width);
     finish = clock();
-    timings[2] += (double) (finish - start) / CLOCKS_PER_SEC;
+    timings[2] += static_cast<double>(finish - start) / CLOCKS_PER_SEC;
     start = clock();
     GilKimmel D(data, width);
     finish = clock();
-    timings[3] += (double) (finish - start) / CLOCKS_PER_SEC;
+    timings[3] += static_cast<double>(finish - start) / CLOCKS_PER_SEC;
     start = clock();
-    if(width <  sizeof(unsigned long)*8) lemirebitmapmaxmin BL(data, width);
+    if (width < sizeof(unsigned long) * 8)
+        lemirebitmapmaxmin BL(data, width);
     finish = clock();
-    timings[4] += (double) (finish - start) / CLOCKS_PER_SEC;
+    timings[4] += static_cast<double>(finish - start) / CLOCKS_PER_SEC;
     start = clock();
     simplelemiremaxmin F(data, width);
     finish = clock();
-    timings[5] += (double) (finish - start) / CLOCKS_PER_SEC;
+    timings[5] += static_cast<double>(finish - start) / CLOCKS_PER_SEC;
     start = clock();
     lemiremaxminwrap Cw(data, width);
     finish = clock();
-    timings[6] += (double) (finish - start) / CLOCKS_PER_SEC;
-
+    timings[6] += static_cast<double>(finish - start) / CLOCKS_PER_SEC;
 }
 
-void process(vector<floattype> & data, uint width = 30, uint times = 1,
+void process(std::vector<floattype> & data, uint width = 30, uint times = 1,
              bool doslow = true) {
-    vector<double> timings;
+    std::vector<double> timings;
     for (uint i = 0; i < times; ++i) {
         compareallalgos(data, timings, width, doslow);
     }
-    cout << "#\tslow\t\tvanHerk\t\tlemire\tsimplelemire\t\tgilkimmel" << endl;
-    cout << "\t" << timings[0] << "\t" << timings[1] << "\t" << timings[2]
-         << "\t" << timings[5] << "\t\t" << timings[3] << endl;
+    std::cout << "#\tslow\t\tvanHerk\t\tlemire\tsimplelemire\t\tgilkimmel"
+              << std::endl;
+    std::cout << "\t" << timings[0] << "\t" << timings[1] << "\t" << timings[2]
+              << "\t" << timings[5] << "\t\t" << timings[3] << std::endl;
 }
 
 void timings(uint width = 50, uint size = 10000, uint times = 500,
              bool doslow = true) {
-    vector<double> timings;
+    std::vector<double> timings;
     for (uint i = 0; i < times; ++i) {
-        vector<floattype> data = getwhite(size);
+        std::vector<floattype> data = getwhite(size);
         compareallalgos(data, timings, width, doslow);
     }
-    cout <<  setw(15) << "slow";
-    cout <<  setw(15) << "vanHerk";
-    cout <<  setw(15) << "lemire";
-    cout <<  setw(15) << "gilkimmel";
-    cout <<  setw(15) << "bitmap";
-    cout <<  setw(15) << "simplelemire";
-    cout <<  setw(15) << "lemirew";
-    cout << endl;
-    for(int i = 0; i <= 6; ++i ) {
-        cout<< setw(15) << timings[i] ;
+    std::cout << std::setw(15) << "slow";
+    std::cout << std::setw(15) << "vanHerk";
+    std::cout << std::setw(15) << "lemire";
+    std::cout << std::setw(15) << "gilkimmel";
+    std::cout << std::setw(15) << "bitmap";
+    std::cout << std::setw(15) << "simplelemire";
+    std::cout << std::setw(15) << "lemirew";
+    std::cout << std::endl;
+    for (int i = 0; i <= 6; ++i) {
+        std::cout << std::setw(15) << timings[i];
     }
-    cout << endl;
-
+    std::cout << std::endl;
 }
 
 void walktimings(uint width = 50, uint size = 10000, uint times = 500,
                  bool doslow = true) {
-    vector<double> timings;
+    std::vector<double> timings;
     for (uint i = 0; i < times; ++i) {
-        vector<floattype> data = getrandomwalk(size);
+        std::vector<floattype> data = getrandomwalk(size);
         compareallalgos(data, timings, width, doslow);
     }
-    cout <<  setw(15) << "slow";
-    cout <<  setw(15) << "vanHerk";
-    cout <<  setw(15) << "lemire";
-    cout <<  setw(15) << "gilkimmel";
-    cout <<  setw(15) << "bitmap";
-    cout <<  setw(15) << "simplelemire";
-    cout <<  setw(15) << "lemirew";
-    cout << endl;
-    for(int i = 0; i <= 6; ++i ) {
-        cout<< setw(15) << timings[i] ;
+    std::cout << std::setw(15) << "slow";
+    std::cout << std::setw(15) << "vanHerk";
+    std::cout << std::setw(15) << "lemire";
+    std::cout << std::setw(15) << "gilkimmel";
+    std::cout << std::setw(15) << "bitmap";
+    std::cout << std::setw(15) << "simplelemire";
+    std::cout << std::setw(15) << "lemirew";
+    std::cout << std::endl;
+    for (int i = 0; i <= 6; ++i) {
+        std::cout << std::setw(15) << timings[i];
     }
-    cout << endl;
-
+    std::cout << std::endl;
 }
 
 void sinetimings(uint width = 50, uint size = 10000, floattype period = 500.0,
                  uint times = 500, bool doslow = true) {
-    vector<double> timings;
+    std::vector<double> timings;
     for (uint i = 0; i < times; ++i) {
-        vector<floattype> data(size);
+        std::vector<floattype> data(size);
         for (uint j = 0; j < size; ++j)
             data[j] = sin(2 * M_PI * j / period);
         compareallalgos(data, timings, width, doslow);
     }
-    cout <<  setw(15) << "slow";
-    cout <<  setw(15) << "vanHerk";
-    cout <<  setw(15) << "lemire";
-    cout <<  setw(15) << "gilkimmel";
-    cout <<  setw(15) << "bitmap";
-    cout <<  setw(15) << "simplelemire";
-    cout <<  setw(15) << "lemirew";
-    cout << endl;
-    for(int i = 0; i <= 6; ++i ) {
-        cout<< setw(15) << timings[i] ;
+    std::cout << std::setw(15) << "slow";
+    std::cout << std::setw(15) << "vanHerk";
+    std::cout << std::setw(15) << "lemire";
+    std::cout << std::setw(15) << "gilkimmel";
+    std::cout << std::setw(15) << "bitmap";
+    std::cout << std::setw(15) << "simplelemire";
+    std::cout << std::setw(15) << "lemirew";
+    std::cout << std::endl;
+    for (int i = 0; i <= 6; ++i) {
+        std::cout << std::setw(15) << timings[i];
     }
-    cout << endl;
-
+    std::cout << std::endl;
 }
 
-void timingsline(vector<floattype> data, uint width = 30, bool doslow = false) {
-    cout << " width = " << width << endl;
+void timingsline(std::vector<floattype> data, uint width = 30,
+                 bool doslow = false) {
+    std::cout << " width = " << width << std::endl;
     clock_t start, finish;
-    time_t time(time_t *t);
+    time_t time(time_t * t);
     start = clock();
     if (doslow)
         for (uint i = 0; i < 30; ++i)
             slowmaxmin A(data, width);
     finish = clock();
-    cout << "slow = " << (double) (finish - start) / CLOCKS_PER_SEC << endl;
+    std::cout << "slow = "
+              << static_cast<double>(finish - start) / CLOCKS_PER_SEC
+              << std::endl;
     start = clock();
     for (uint i = 0; i < 30; ++i)
         vanHerkGilWermanmaxmin B(data, width);
     finish = clock();
-    cout << "vanHerk = " << (double) (finish - start) / CLOCKS_PER_SEC << endl;
+    std::cout << "vanHerk = "
+              << static_cast<double>(finish - start) / CLOCKS_PER_SEC
+              << std::endl;
     start = clock();
     for (uint i = 0; i < 30; ++i)
         lemiremaxmin C(data, width);
     finish = clock();
-    cout << "lemire = " << (double) (finish - start) / CLOCKS_PER_SEC << endl;
-    cout << "------------" << endl;
+    std::cout << "lemire = "
+              << static_cast<double>(finish - start) / CLOCKS_PER_SEC
+              << std::endl;
+    std::cout << "------------" << std::endl;
 }
 
 /**
@@ -283,7 +288,7 @@ int main(int params, char ** args) {
     int windowend = 11;
     bool doslow = true;
     bool cininput = false;
-    vector<floattype> data(0);
+    std::vector<floattype> data(0);
     for (int i = 1; i < params; ++i) {
         if (strcmp(args[i], "--skipslow") == 0) {
             doslow = false;
@@ -292,7 +297,7 @@ int main(int params, char ** args) {
             cininput = true;
         }
         if (strcmp(args[i], "--unit") == 0) {
-            cout << "OK " << endl;
+            std::cout << "OK " << std::endl;
             return 0;
         }
         if (strcmp(args[i], "--window") == 0) {
@@ -300,7 +305,8 @@ int main(int params, char ** args) {
                 windowbegin = atoi(args[++i]);
                 windowend = windowbegin + 1;
             } else {
-                cerr << "--window expects an integer (length)" << endl;
+                std::cerr << "--window expects an integer (length)"
+                          << std::endl;
                 return -1;
             }
             continue;
@@ -310,7 +316,8 @@ int main(int params, char ** args) {
                 windowbegin = atoi(args[++i]);
                 windowend = atoi(args[++i]) + 1;
             } else {
-                cerr << "--windowrange expects two integers (length)" << endl;
+                std::cerr << "--windowrange expects two integers (length)"
+                          << std::endl;
                 return -1;
             }
             continue;
@@ -319,7 +326,7 @@ int main(int params, char ** args) {
             if (params - i > 1)
                 whitesize = atoi(args[++i]);
             else {
-                cerr << "--white expects an integer (length)" << endl;
+                std::cerr << "--white expects an integer (length)" << std::endl;
                 return -1;
             }
             continue;
@@ -328,7 +335,7 @@ int main(int params, char ** args) {
             if (params - i > 1)
                 walksize = atoi(args[++i]);
             else {
-                cerr << "--walk expects an integer (length)" << endl;
+                std::cerr << "--walk expects an integer (length)" << std::endl;
                 return -1;
             }
             continue;
@@ -337,15 +344,15 @@ int main(int params, char ** args) {
             if (params - i > 1)
                 sinesize = atoi(args[++i]);
             else {
-                cerr << "--sine expects an integer (length)" << endl;
+                std::cerr << "--sine expects an integer (length)" << std::endl;
                 return -1;
             }
             if (params - i > 1)
                 sineperiod = atof(args[++i]);
             else {
-                cerr
-                        << "--sine expects an integer (length) followed by a float (freq) "
-                        << endl;
+                std::cerr << "--sine expects an integer (length) followed by a "
+                             "float (freq) "
+                          << std::endl;
                 return -1;
             }
             continue;
@@ -354,7 +361,7 @@ int main(int params, char ** args) {
             if (params - i > 1)
                 times = atoi(args[++i]);
             else {
-                cerr << "--times expects an integer" << endl;
+                std::cerr << "--times expects an integer" << std::endl;
                 return -1;
             }
             continue;
@@ -362,36 +369,38 @@ int main(int params, char ** args) {
     }
     for (int window = windowbegin; window < windowend; ++window) {
         if (whitesize > 0) {
-            cout << "# window = " << window << " whitesize = " << whitesize
-                 << " times = " << times << " doslow = " << doslow << endl;
+            std::cout << "# window = " << window << " whitesize = " << whitesize
+                      << " times = " << times << " doslow = " << doslow
+                      << std::endl;
             assert(window + 1 < whitesize);
             timings(window, whitesize, times, doslow);
         } else if (walksize > 0) {
-            cout << "# window = " << window << " walksize = " << walksize
-                 << " times = " << times << " doslow = " << doslow << endl;
+            std::cout << "# window = " << window << " walksize = " << walksize
+                      << " times = " << times << " doslow = " << doslow
+                      << std::endl;
             walktimings(window, walksize, times, doslow);
 
         } else if (sinesize > 0) {
-            cout << "# window = " << window << " sinesize = " << sinesize
-                 << " sine period " << sineperiod << " times = " << times
-                 << " doslow = " << doslow << endl;
+            std::cout << "# window = " << window << " sinesize = " << sinesize
+                      << " sine period " << sineperiod << " times = " << times
+                      << " doslow = " << doslow << std::endl;
             assert(window + 1 < sinesize);
             sinetimings(window, sinesize, sineperiod, times, doslow);
         } else {
-            if ((data.size() == 0) && cininput) {
+            if ((data.empty()) && cininput) {
                 data = getcin();
-                cout << "# window = " << window << " times = " << times
-                     << " doslow = " << doslow << endl;
+                std::cout << "# window = " << window << " times = " << times
+                          << " doslow = " << doslow << std::endl;
                 process(data, window, times, doslow);
             } else {
-                cout<<"Generating sine waves."<<endl;
-                for(uint width = 3; width <=100; ++width) {
-                    cout << "Using a min/max width of " << width << endl;
+                std::cout << "Generating sine waves." << std::endl;
+                for (uint width = 3; width <= 100; ++width) {
+                    std::cout << "Using a min/max width of " << width
+                              << std::endl;
                     sinetimings(width);
                 }
             }
         }
     }
     return 0;
-
 }
