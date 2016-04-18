@@ -1,6 +1,6 @@
 Fast running maximum-minimum filters implemented in C++.
 ========================================================== 
-
+[![Build Status](https://travis-ci.org/lemire/runningmaxmin.png)](https://travis-ci.org/lemire/runningmaxmin)
 
 This code implements the algorithms described in the following paper:
 
@@ -20,6 +20,8 @@ Usage
 To reproduce the numbers from the paper, do the following:
 
   make
+  
+  ./unit
   
   ./runningmaxmin --sine 1000000 10000 --windowrange 4 100  --times 1
   
