@@ -14,6 +14,8 @@ http://arxiv.org/abs/cs.DS/0610046
 
 Contributors: Daniel Lemire, Kai Wolf
 
+The main algorithm presented in this package is used in [Apache Hive](https://github.com/apache/hive).
+
 Usage
 ----- 
 
