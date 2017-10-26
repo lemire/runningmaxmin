@@ -39,6 +39,8 @@ are good choices.
 See also
 ---------
 
+For a Python version, see https://github.com/lemire/pythonmaxmin
+
 For an application of this idea to rolling statistics in JavaScript, see
 
 https://github.com/shimondoodkin/efficient-rolling-stats
