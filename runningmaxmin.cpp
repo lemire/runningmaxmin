@@ -271,6 +271,7 @@ int main(int params, char ** args) {
             continue;
         }
     }
+    std::cout << "# we report timings (in seconds) so lower is better" << std::endl;
     for (int window = windowbegin; window < windowend; ++window) {
         if (whitesize > 0) {
             std::cout << "# window = " << window << " whitesize = " << whitesize
