@@ -48,3 +48,8 @@ https://github.com/shimondoodkin/efficient-rolling-stats
 For an application in Go, please see 
 
 https://github.com/notnot/movingminmax
+
+Another C++ library:
+
+STL Monotonic Wedge
+https://github.com/EvanBalster/STL_mono_wedge
