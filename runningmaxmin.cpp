@@ -35,8 +35,8 @@ std::vector<floattype> getcin() {
 
 void compareallalgos(std::vector<floattype> & data,
                      std::vector<double> & timings, uint width, bool doslow) {
-    if (timings.size() < 7)
-        timings = std::vector<double>(7, 0.0);
+    if (timings.size() < 8)
+        timings = std::vector<double>(8, 0.0);
     clock_t start, finish;
     start = clock();
     if (doslow)
@@ -68,6 +68,10 @@ void compareallalgos(std::vector<floattype> & data,
     lemiremaxminwrap Cw(data, width);
     finish = clock();
     timings[6] += static_cast<double>(finish - start) / CLOCKS_PER_SEC;
+    start = clock();
+    monowedgewrap Mw(data, width);
+    finish = clock();
+    timings[7] += static_cast<double>(finish - start) / CLOCKS_PER_SEC;
 }
 
 void process(std::vector<floattype> & data, uint width = 30, uint times = 1,
@@ -96,8 +100,9 @@ void timings(uint width = 50, uint size = 10000, uint times = 500,
     std::cout << std::setw(15) << "bitmap";
     std::cout << std::setw(15) << "simplelemire";
     std::cout << std::setw(15) << "lemirew";
+    std::cout << std::setw(15) << "monowedge";
     std::cout << std::endl;
-    for (int i = 0; i <= 6; ++i) {
+    for (int i = 0; i <= 7; ++i) {
         std::cout << std::setw(15) << timings[i];
     }
     std::cout << std::endl;
@@ -117,8 +122,9 @@ void walktimings(uint width = 50, uint size = 10000, uint times = 500,
     std::cout << std::setw(15) << "bitmap";
     std::cout << std::setw(15) << "simplelemire";
     std::cout << std::setw(15) << "lemirew";
+    std::cout << std::setw(15) << "monowedge";
     std::cout << std::endl;
-    for (int i = 0; i <= 6; ++i) {
+    for (int i = 0; i <= 7; ++i) {
         std::cout << std::setw(15) << timings[i];
     }
     std::cout << std::endl;
@@ -140,8 +146,9 @@ void sinetimings(uint width = 50, uint size = 10000, floattype period = 500.0,
     std::cout << std::setw(15) << "bitmap";
     std::cout << std::setw(15) << "simplelemire";
     std::cout << std::setw(15) << "lemirew";
+    std::cout << std::setw(15) << "monowedge";
     std::cout << std::endl;
-    for (int i = 0; i <= 6; ++i) {
+    for (int i = 0; i <= 7; ++i) {
         std::cout << std::setw(15) << timings[i];
     }
     std::cout << std::endl;

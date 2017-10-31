@@ -33,6 +33,15 @@ void test(std::vector<floattype> data, uint width = 3) {
     GilKimmel D(data, width);
     vanHerkGilWermanmaxmin B(data, width);
     lemirebitmapmaxmin E(data, width);
+    monowedgewrap M(data,width);
+    if (!compare(A, M)) {
+        std::cout << "array " << std::endl;
+        display(data);
+        std::cout << "solution " << std::endl;
+        display(A);
+        std::cout << "monowedgewrap " << std::endl;
+        display(M);
+    }
     if (!compare(A, Cw)) {
         std::cout << "array " << std::endl;
         display(data);

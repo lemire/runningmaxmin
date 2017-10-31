@@ -414,8 +414,51 @@ public:
     std::vector<floattype> minvalues;
 };
 
+#include "mono_wedge.h"
+
+struct Sample {
+	floattype value;
+	uint   time;
+
+	bool operator<(const Sample &o) const    {return value < o.value;}
+	bool operator>(const Sample &o) const    {return value > o.value;}
+};
+// wrapper over the monowedge streaming version
+class monowedgewrap : public minmaxfilter {
+public:
+    monowedgewrap(std::vector<floattype> & array, uint width)
+        : maxvalues(array.size() - width + 1),
+          minvalues(array.size() - width + 1) {
+        std::deque<Sample> max_wedge;
+        std::deque<Sample> min_wedge;
+        for (uint i = 0; i < width - 1; ++i) {
+            Sample sample = {array[i], i};
+            mono_wedge::max_wedge_update(max_wedge, sample);
+            mono_wedge::min_wedge_update(min_wedge, sample);
+        }
+        for (uint i = width; i < array.size(); ++i) {
+            Sample sample = {array[i], i};
+            mono_wedge::max_wedge_update(max_wedge, sample);
+            mono_wedge::min_wedge_update(min_wedge, sample);
+            while (max_wedge.front().time <= i-width) max_wedge.pop_front();
+            while (min_wedge.front().time <= i-width) min_wedge.pop_front();
+            maxvalues[i - width + 1] = max_wedge.front().value;
+            minvalues[i - width + 1] = min_wedge.front().value;
+        }
+    }
+    std::vector<floattype> & getmaxvalues() {
+        return maxvalues;
+    }
+    std::vector<floattype> & getminvalues() {
+        return minvalues;
+    }
+    std::vector<floattype> maxvalues;
+    std::vector<floattype> minvalues;
+};
+
+
 /**
- * implementation of the streaming algorithm
+ * implementation of the bitmap-based streaming algorithm
  */
 class lemirebitmapmaxmin : public minmaxfilter {
 public:
