@@ -158,7 +158,6 @@ void timingsline(std::vector<floattype> data, uint width = 30,
                  bool doslow = false) {
     std::cout << " width = " << width << std::endl;
     clock_t start, finish;
-    time_t time(time_t * t);
     start = clock();
     if (doslow)
         for (uint i = 0; i < 30; ++i)
