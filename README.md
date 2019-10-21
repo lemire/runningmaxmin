@@ -21,6 +21,7 @@ Usage
 
 To reproduce the numbers from the paper, do the following:
 
+```
   make
   
   ./unit
@@ -28,6 +29,7 @@ To reproduce the numbers from the paper, do the following:
   ./runningmaxmin --sine 1000000 10000 --windowrange 4 100  --times 1
   
   ./runningmaxmin --white 1000000 --windowrange 4 100  --times 1
+```
 
 Suitability 
 ------------
@@ -39,17 +41,8 @@ are good choices.
 See also
 ---------
 
-For a Python version, see https://github.com/lemire/pythonmaxmin
-
-For an application of this idea to rolling statistics in JavaScript, see
-
-https://github.com/shimondoodkin/efficient-rolling-stats
-
-For an application in Go, please see 
-
-https://github.com/notnot/movingminmax
-
-Another C++ library:
-
-STL Monotonic Wedge
-https://github.com/EvanBalster/STL_mono_wedge
+- Julia version: streaming maximum-minimum filter implementation in Julia  https://github.com/sairus7/MaxMinFilters.jl  
+- For a Python version, see https://github.com/lemire/pythonmaxmin
+- For an application of this idea to rolling statistics in JavaScript, see https://github.com/shimondoodkin/efficient-rolling-stats
+- For an application in Go, please see  https://github.com/notnot/movingminmax
+- Another C++ library: STL Monotonic Wedge https://github.com/EvanBalster/STL_mono_wedge
