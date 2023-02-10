@@ -4,13 +4,8 @@ Fast running maximum-minimum filters implemented in C++.
 
 This code implements the algorithms described in the following paper:
 
-Daniel Lemire, Streaming Maximum-Minimum Filter Using No More than 
-Three Comparisons per Element. Nordic Journal of Computing, 13 (4), pages 328-339, 2006. 
-
-A preprint is available there:
-
-http://arxiv.org/abs/cs.DS/0610046
-
+Daniel Lemire, [Streaming Maximum-Minimum Filter Using No More than 
+Three Comparisons per Element](http://arxiv.org/abs/cs.DS/0610046). Nordic Journal of Computing, 13 (4), pages 328-339, 2006. 
 
 Contributors: Daniel Lemire, Kai Wolf
 
